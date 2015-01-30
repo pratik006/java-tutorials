@@ -1,4 +1,4 @@
-package com.prapps.tutorial.spring.java.config;
+package com.prapps.tutorial.spring.ioc;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

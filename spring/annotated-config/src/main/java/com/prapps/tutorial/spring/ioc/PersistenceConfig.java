@@ -1,4 +1,4 @@
-package com.prapps.tutorial.spring.jpa.config;
+package com.prapps.tutorial.spring.ioc;
 
 import java.util.Properties;
 

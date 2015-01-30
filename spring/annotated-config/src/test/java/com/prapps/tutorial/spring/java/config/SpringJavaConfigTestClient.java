@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.prapps.tutorial.spring.ioc.AppContext;
 import com.prapps.tutorial.spring.service.api.EmployeeService;
 import com.prapps.tutorial.spring.vo.Employee;
 
