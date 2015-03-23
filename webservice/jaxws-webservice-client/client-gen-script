@@ -1,0 +1,1 @@
+wsimport -s src/main/java http://localhost:9999/ws/hello?wsdl
