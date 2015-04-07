@@ -1,0 +1,17 @@
+table->tbody->tr->td {
+	border: solid 	;
+	border-width: 0 1px;
+	border-collapse: collapse;
+}
+
+table->tbody->tr {
+	border: solid 	;
+	border-width: 0 1px;
+	border-collapse: collapse;
+}
+
+table {
+	border: solid 	;
+	border-width: 0 1px;
+	border-collapse: collapse;
+}
