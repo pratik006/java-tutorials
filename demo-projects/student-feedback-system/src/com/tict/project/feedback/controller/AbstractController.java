@@ -3,6 +3,7 @@ package com.tict.project.feedback.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +40,7 @@ public abstract class AbstractController {
     	feedbackHandler = new FeedbackHandler(connector);
 	}
 	
-	abstract String handleRequest(HttpServletRequest request, HttpServletResponse response);
+	abstract public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 	
 	protected User getUserInfo(HttpServletRequest req) {
 		return (User)req.getSession().getAttribute("user");
