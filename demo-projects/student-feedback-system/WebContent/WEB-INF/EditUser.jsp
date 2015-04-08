@@ -10,7 +10,7 @@
 <body>
 
 <form action="./FeedbackServlet" method="post">
-<input type="hidden" name="action" value="saveStudent" />
+<input type="hidden" name="action" value="saveUser" />
 <table>
 	<tr><td>First Name</td><td><input type="text" name="fname" value="${user.firstName}"/></td><td>Last Name</td><td><input type="text" name="lname" value="${user.lastName}"/></td></tr>
 	<tr><td>Roll Number</td><td><input type="text" name="username" value="${user.username}" readonly="readonly"/></td><td>Type</td><td><input type="text" name="utype" value="${user.type}" readonly="readonly"/></td></tr>

@@ -23,6 +23,7 @@ public class DatabaseConnector {
 		String driverClassName = connectionProp.getProperty("driverClassName");
 		Class.forName(driverClassName);
 		connection = DriverManager.getConnection(url, username, password);
+		connection.setAutoCommit(false);
 		System.out.println("connection created.");
 		stmt = connection.createStatement();
 	}
@@ -40,5 +41,13 @@ public class DatabaseConnector {
 	public void close() throws SQLException {
 		stmt.close();
 		connection.close();
+	}
+	
+	public void commit() throws SQLException {
+		connection.commit();
+	}
+	
+	public void rollback() throws SQLException {
+		connection.rollback();
 	}
 }

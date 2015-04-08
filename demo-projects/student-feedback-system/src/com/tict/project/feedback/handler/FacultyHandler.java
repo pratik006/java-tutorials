@@ -16,9 +16,17 @@ public class FacultyHandler extends UserHandler {
 	}
 	
 	public void addFaculty(User faculty, List<String[]> subjects) throws SQLException {
-		saveUser(faculty);
-		String query = "insert into "+FeedbackConsts.SCHEMA+".FAC....";
-		connector.executeUpdate(query);
+		try {
+			saveUser(faculty);
+			String query = "insert into "+FeedbackConsts.SCHEMA+".FAC....";
+			connector.executeUpdate(query);
+			connector.commit();
+		}
+		catch(SQLException ex) {
+			ex.printStackTrace();
+			connector.rollback();
+			throw ex;
+		}
 	}
 	
 	public List<User> getAllFaculties() {

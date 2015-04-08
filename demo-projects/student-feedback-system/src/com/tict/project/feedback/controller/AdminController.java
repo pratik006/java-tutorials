@@ -33,6 +33,27 @@ public class AdminController extends AbstractController {
 				view = "WEB-INF/AddStudent.jsp";
 			}
 		}
+		else if("saveUser".equals(action)) {
+			if(user != null && FeedbackConsts.ROLE_ADMIN.equals(user.getType())) {
+				Student student = new Student();
+				String fname = request.getParameter("fname");
+				String lname = request.getParameter("lname");
+				String type = request.getParameter("utype");
+				String username = request.getParameter("username");
+				
+				student.setFirstName(fname);
+				student.setLastName(lname);
+				student.setType(type);
+				student.setUsername(username);
+				try {
+					userHandler.saveUser(student);
+					request.setAttribute("msg", "User updated Successfully.");
+					view = "WEB-INF/Home.jsp";
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		else if("saveStudent".equals(action)) {
 			if(user != null && FeedbackConsts.ROLE_ADMIN.equals(user.getType())) {
 				Student student = new Student();

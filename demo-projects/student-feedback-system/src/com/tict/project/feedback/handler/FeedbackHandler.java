@@ -59,27 +59,34 @@ public class FeedbackHandler {
 	}
 	
 	public void saveFeedback(HttpServletRequest request, long studentId) throws SQLException {
-		for(FeedbackConfigParam feedbackConfigParam : feedbackConfigParams) {
-			int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-			int subjectId = Integer.parseInt(request.getParameter("subjectId"));
-			String code = feedbackConfigParam.getCode();
-			String value = request.getParameter(code);
-			System.out.println("code: "+feedbackConfigParam.getCode()+"\tvalue: "+value);
-			
-			String query1 = "select * from "+FeedbackConsts.SCHEMA+".FAC_SUB_COURSE_XREF where FACULTY_ID="+facultyId+" and SUBJECT_ID="+subjectId;
-			
-			long facSubCourseId = -1;
-			ResultSet rs1 = connector.executeQuery(query1);
-			if(rs1.next()) {
-				facSubCourseId = rs1.getInt("ID");
+		try {
+			for(FeedbackConfigParam feedbackConfigParam : feedbackConfigParams) {
+				int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+				int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+				String code = feedbackConfigParam.getCode();
+				String value = request.getParameter(code);
+				System.out.println("code: "+feedbackConfigParam.getCode()+"\tvalue: "+value);
+				
+				String query1 = "select * from "+FeedbackConsts.SCHEMA+".FAC_SUB_COURSE_XREF where FACULTY_ID="+facultyId+" and SUBJECT_ID="+subjectId;
+				
+				long facSubCourseId = -1;
+				ResultSet rs1 = connector.executeQuery(query1);
+				if(rs1.next()) {
+					facSubCourseId = rs1.getInt("ID");
+				}
+				rs1.close();
+				System.out.println("facSubCourseId: "+facSubCourseId);
+				
+				String query = "insert into "+FeedbackConsts.SCHEMA+".FEEDBACK(FEEDBACK_CONFIG_ID, STUDENT_ID, FAC_SUB_COURSE_ID, EVALUATION) values("+
+				feedbackConfigParam.getId()+", "+studentId+", "+facSubCourseId+", "+value+")";
+				connector.executeUpdate(query);
+				connector.commit();
 			}
-			rs1.close();
-			System.out.println("facSubCourseId: "+facSubCourseId);
-			
-			String query = "insert into "+FeedbackConsts.SCHEMA+".FEEDBACK(FEEDBACK_CONFIG_ID, STUDENT_ID, FAC_SUB_COURSE_ID, EVALUATION) values("+
-			feedbackConfigParam.getId()+", "+studentId+", "+facSubCourseId+", "+value+")";
-			connector.executeUpdate(query);
 		}
+		catch(SQLException ex) {
+			connector.rollback();
+			throw ex;
+		}		
 	}
 	
 	protected FeedbackConfigParam mapFeedbackConfigParamFromRS(ResultSet rs) throws SQLException {
