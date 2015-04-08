@@ -9,4 +9,6 @@ public interface FeedbackConsts {
 	
 	
 	public static final String ERROR_MSG = "errorMsg";
+	public static final String LOGIN_PAGE = "Login.jsp";
+	public static final String ERROR_PAGE = "Error.jsp";
 }

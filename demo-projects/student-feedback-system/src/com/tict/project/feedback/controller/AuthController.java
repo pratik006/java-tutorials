@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.vo.User;
 
 public class AuthController extends AbstractController {
@@ -38,17 +39,17 @@ public class AuthController extends AbstractController {
 				}
 				else {
 					addErrorMsg(request, "Invalid Credentials !");
-					view = "Error.jsp";
+					view = FeedbackConsts.ERROR_PAGE;
 				}
 			}
 			else {
 				addErrorMsg(request, "Invalid Credentials !");
-				view = "Login.jsp";
+				view = FeedbackConsts.LOGIN_PAGE;
 			}
 		}
 		else if("logout".equalsIgnoreCase(action)) {
 			request.getSession().invalidate();
-			view = "Login.jsp";
+			view = FeedbackConsts.LOGIN_PAGE;
 		}
 		
 		if(view == null) {

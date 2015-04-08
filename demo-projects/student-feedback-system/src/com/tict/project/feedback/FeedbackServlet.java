@@ -68,13 +68,18 @@ public class FeedbackServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		String view = "";
 		
-		if("login".equalsIgnoreCase(action) || "logout".equalsIgnoreCase(action)) {
+		if("login".equalsIgnoreCase(action)) {
 			view = authController.handleRequest(request, response);
+		}
+		else if("logout".equalsIgnoreCase(action)) {
+			view = authController.handleRequest(request, response);
+			response.sendRedirect(view);
+			return;
 		}
 		else {			
 			User user = getUserInfo(request);
 			if(user == null) {
-				view = "Login.jsp";
+				view = FeedbackConsts.LOGIN_PAGE;
 			}
 			else {
 				//valid user
@@ -98,7 +103,7 @@ public class FeedbackServlet extends HttpServlet {
 	}
 	
 	private void addErrorMsg(HttpServletRequest request, String msg) {
-		request.setAttribute(FeedbackConsts.ERROR_MSG, msg);
+	request.setAttribute(FeedbackConsts.ERROR_MSG, msg);
 	}
 }
 
