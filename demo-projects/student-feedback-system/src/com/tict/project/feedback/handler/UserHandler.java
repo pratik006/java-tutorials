@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tict.project.feedback.DatabaseConnector;
 import com.tict.project.feedback.consts.FeedbackConsts;
+import com.tict.project.feedback.db.DatabaseConnector;
 import com.tict.project.feedback.vo.User;
 
 public class UserHandler extends AbstractHandler {
@@ -56,7 +56,7 @@ public class UserHandler extends AbstractHandler {
 		return users;
 	}
 	
-	private User mapUserFromRS(ResultSet rs) throws SQLException {
+	protected User mapUserFromRS(ResultSet rs) throws SQLException {
 		User user = new User();
 		String fname = rs.getString("fname");
 		String lname = rs.getString("lname");

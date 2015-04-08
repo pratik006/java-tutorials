@@ -1,4 +1,4 @@
-package com.tict.project.feedback;
+package com.tict.project.feedback.db;
 
 import java.io.IOException;
 import java.sql.Connection;

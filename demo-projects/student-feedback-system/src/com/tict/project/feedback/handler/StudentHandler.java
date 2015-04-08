@@ -2,8 +2,8 @@ package com.tict.project.feedback.handler;
 
 import java.sql.SQLException;
 
-import com.tict.project.feedback.DatabaseConnector;
 import com.tict.project.feedback.consts.FeedbackConsts;
+import com.tict.project.feedback.db.DatabaseConnector;
 import com.tict.project.feedback.vo.Student;
 import com.tict.project.feedback.vo.User;
 

@@ -3,8 +3,8 @@ package com.tict.project.feedback.handler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.tict.project.feedback.DatabaseConnector;
 import com.tict.project.feedback.consts.FeedbackConsts;
+import com.tict.project.feedback.db.DatabaseConnector;
 
 public class LoginHandler {
 
