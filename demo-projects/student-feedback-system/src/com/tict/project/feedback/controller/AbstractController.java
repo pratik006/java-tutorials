@@ -54,4 +54,5 @@ public abstract class AbstractController {
 		String action = request.getParameter("action");
 		return action;
 	}
+	
 }

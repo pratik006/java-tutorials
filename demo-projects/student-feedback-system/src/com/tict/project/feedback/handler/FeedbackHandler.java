@@ -1,9 +1,12 @@
 package com.tict.project.feedback.handler;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,7 +37,7 @@ public class FeedbackHandler {
 		return feedbackConfigParams;
 	}
 	
-	public List<FeedbackConfigParam> viewFeedback(long facultyId) {
+	/*public List<FeedbackConfigParam> viewFeedback(long facultyId) {
 		List<FeedbackConfigParam> result = new ArrayList<FeedbackConfigParam>();
 		try {
 			String query = "select t2.id, t2.attribute ,t2.attribute_desc , avg(t1.EVALUATION) evaluation"+ 
@@ -56,29 +59,98 @@ public class FeedbackHandler {
 			e.printStackTrace();
 		}
 		return result;
+	}*/
+	
+	public String[][] viewFeedback() throws SQLException {
+		ResultSet rs = connector.executeQuery(FeedbackConsts.QUERY_VIEW_FEEDBACK);
+		ResultSetMetaData rsm = rs.getMetaData();
+		Map<String, Map<String, String>> facultyMap = new HashMap<String, Map<String, String>>();
+		while(rs.next()) 
+		{
+			for(int i=1;i<=3;i++) {
+				String facultyName = rs.getString(1);
+				Map<String, String> subMap = null;
+				if(!facultyMap.containsKey(facultyName)) {
+					subMap = new HashMap<String, String>();
+					facultyMap.put(facultyName, subMap);
+				}
+				else {
+					subMap = facultyMap.get(facultyName);
+				}
+				
+				String key = rs.getString(2);
+				subMap.put(rs.getString(2), rs.getString(3));
+			}
+		}
+		int length = facultyMap.keySet().size()+1;
+		int width = -1;
+		String[][] arr = new String[length][];
+		
+		int ctr = 1;
+		boolean flag = false;
+		for(String key : facultyMap.keySet()) {
+			width = facultyMap.get(key).keySet().size()+1;
+			arr[ctr] = new String[width];
+			if(!flag) {
+				arr[0] = new String[width];
+				arr[0][0] = "Faculty Name";
+			}
+			int ctr2 = 0;
+			arr[ctr][ctr2++] =  key;			
+			for(String key2 : facultyMap.get(key).keySet()) {
+				if(!flag) {
+					arr[0][ctr2] = key2;
+				}				
+				arr[ctr][ctr2++] =  facultyMap.get(key).get(key2);
+			}
+			ctr++;
+			flag = true;
+		}
+		return arr;
+	}
+	
+	public List<Map<String, String>> getFeedbackSubjects(Long studentId, String subjectId, String facultyId) throws SQLException {
+		String query = null;
+		if(null != subjectId) {
+			query = FeedbackConsts.QUERY_STUDENT_SUBJECTS_FACULTY.replaceAll("\\?", ""+studentId)+" AND T3.ID="+subjectId;
+		}
+		if(null != facultyId) {
+			query = FeedbackConsts.QUERY_STUDENT_SUBJECTS_FACULTY.replaceAll("\\?", ""+studentId)+" AND T4.ID="+facultyId;
+		}
+		else {
+			query = FeedbackConsts.QUERY_STUDENT_SUBJECTS_FACULTY.replaceAll("\\?", ""+studentId);
+		}
+		
+		
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		
+		ResultSet rs = connector.executeQuery(query);
+		while(rs.next()) {
+			Map<String,String> map = new HashMap<String, String>();
+			map.put("SUBJECT_ID", ""+rs.getLong("SUBJECT_ID"));
+			map.put("SUBJECT_NAME", rs.getString("SUBJECT_NAME"));
+			map.put("FACULTY_ID", ""+rs.getLong("FACULTY_ID"));			
+			map.put("FNAME", ""+rs.getString("FNAME"));
+			map.put("LNAME", ""+rs.getString("LNAME"));
+			map.put("SEM_SUB_FAC_ID", ""+rs.getLong("SEM_SUB_FAC_ID"));
+			map.put("COURSE_ID", ""+rs.getLong("COURSE_ID"));
+			map.put("COURSE_NAME", ""+rs.getString("COURSE_NAME"));
+			list.add(map);
+		}
+		return list;
 	}
 	
 	public void saveFeedback(HttpServletRequest request, long studentId) throws SQLException {
 		try {
 			for(FeedbackConfigParam feedbackConfigParam : feedbackConfigParams) {
-				int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-				int subjectId = Integer.parseInt(request.getParameter("subjectId"));
+				String semSubFacId = request.getParameter("semSubFacId");
+				System.out.println("semSubFacId: "+semSubFacId);
 				String code = feedbackConfigParam.getCode();
 				String value = request.getParameter(code);
 				System.out.println("code: "+feedbackConfigParam.getCode()+"\tvalue: "+value);
 				
-				String query1 = "select * from "+FeedbackConsts.SCHEMA+".FAC_SUB_COURSE_XREF where FACULTY_ID="+facultyId+" and SUBJECT_ID="+subjectId;
-				
-				long facSubCourseId = -1;
-				ResultSet rs1 = connector.executeQuery(query1);
-				if(rs1.next()) {
-					facSubCourseId = rs1.getInt("ID");
-				}
-				rs1.close();
-				System.out.println("facSubCourseId: "+facSubCourseId);
-				
-				String query = "insert into "+FeedbackConsts.SCHEMA+".FEEDBACK(FEEDBACK_CONFIG_ID, STUDENT_ID, FAC_SUB_COURSE_ID, EVALUATION) values("+
-				feedbackConfigParam.getId()+", "+studentId+", "+facSubCourseId+", "+value+")";
+				String query = "insert into "+FeedbackConsts.SCHEMA+".FEEDBACK(FEEDBACK_CONFIG_ID, STUDENT_ID, SEM_SUB_FAC_ID, EVALUATION) values("+
+				feedbackConfigParam.getId()+", "+studentId+", "+semSubFacId+", "+value+")";
 				connector.executeUpdate(query);
 				connector.commit();
 			}

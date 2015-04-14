@@ -168,6 +168,15 @@ public class AdminController extends AbstractController {
 				}
 			}
 		}
+		else if("viewFeedback".equals(action)) {
+			try {
+				String[][] arr = feedbackHandler.viewFeedback();
+				request.setAttribute("results", arr);
+				view = "WEB-INF/ViewFeedback.jsp";
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return view;
 	}
 }

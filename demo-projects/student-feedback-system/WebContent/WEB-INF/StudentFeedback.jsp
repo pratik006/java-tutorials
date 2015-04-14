@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.tict.project.feedback.vo.FeedbackConfigParam"%>
 <%@page import="com.tict.project.feedback.vo.Course"%>
 <%@page import="com.tict.project.feedback.vo.Subject"%>
 <%@page import="java.util.List"%>
@@ -12,128 +14,106 @@
 </head>
 <body>
 	<h1 style="text-align: center;">Student Feedback</h1>
+<div id="outerWrapper" style="width: 100%;">
+<div id="feedbackFormDiv" style="width: 50%; margin: 0 auto; float: none;">
 
-
-	<form action="./FeedbackServlet?action=saveFeedback" method="post">
-		COURSE:<br> <select name="course">
-			<% 
-			List<Course> courses = (List<Course>)request.getAttribute("courses");
-			for(Course course : courses) { 
-			%>
-			<option value="<%=course.getId()%>"><%= course.getName() %></option>
-			<%} %>
-		</select> <br> SUBJECT:<br> 
+		<form action="./FeedbackServlet?action=addFeedback" method="post">
 		
-		<select name="subjectId">
-			<% 
-			List<Subject> subjects = (List<Subject>)request.getAttribute("subjects");
-			for(Subject subject : subjects) { 
-			%>
-			<option value="<%=subject.getId()%>"><%= subject.getName() %></option>
-			<%} %>
-		</select> <br> FACULTY NAME:<br> 
-		
-		<select name="facultyId">
-			<% 
-			List<User> faculties = (List<User>)request.getAttribute("faculties");
-			for(User faculty : faculties) { 
-			%>
-			<option value="<%=faculty.getId()%>"><%= faculty.getFirstName()+" "+faculty.getLastName() %></option>
-			<%} %>
-		</select> <br>
-		
-		
-		<table border="1" style="width: 100%">
+		<div>
+		<table style="width: 90%;">
+			<tr>
+				<td>COURSE:</td>
+				<td>
+					<select name="courseId">
+					<%-- <% 
+					List<Course> list = (List<Course>)request.getAttribute("courses");
+					for(Course course : courses) { 
+					%>
+					<option value="<%=course.getId()%>"><%= course.getName() %></option>
+					<%} %> --%>
+					<%
+					List<Map<String, String>> list = (List<Map<String, String>>)request.getAttribute("map");
+					 int ctr = 0;
+					 /*for(ctr = 0;ctr<list.size();ctr++) {*/
+						Map<String, String> map = list.get(0); 
+					%>
+					<option value="<%= map.get("COURSE_ID") %>"><%= map.get("COURSE_NAME") %></option>
+					</select>
+				</td>
+			
+				<td>SUBJECT:</td>
+				<td>
+					<select name="subjectId" onchange="this.form.submit();">
+						<%
+						if(list.size() > 1) {
+						%>
+						<option>Select</option>
+						<% } %>
+						<% 
+						for(ctr = 0;ctr<list.size();ctr++) {
+							map = list.get(ctr);
+						%>
+						<option value="<%= map.get("SUBJECT_ID") %>"><%= map.get("SUBJECT_NAME") %></option>
+						<%} %>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>FACULTY NAME:</td>
+				<td>
+					<select name="facultyId" onchange="this.form.submit();">
+						<%
+						if(list.size() > 1) {
+						%>
+						<option>Select</option>
+						<% } %>
+						<% 
+						for(ctr = 0;ctr<list.size();ctr++) {
+							map = list.get(ctr);
+						%>
+						<option value="<%= map.get("FACULTY_ID") %>"><%= map.get("FNAME") %> <%= map.get("LNAME") %></option>
+						<%} %>
+					</select>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+		</div>
+		</form>
+		<form action="./FeedbackServlet?action=saveFeedback" method="post">
+		<div>
+			<table style="width: 90%; border-top: 1px solid black;">
 			<tr>
 				<th>EVALUATION</th>
-				<th>REMARKS</th>
+				<th style="width: 100px;">REMARKS</th>
 
 			</tr>
+			<%	List<FeedbackConfigParam> params = (List<FeedbackConfigParam>)request.getAttribute("params");
+				for(FeedbackConfigParam param : params) { 
+			%>
 			<tr>
-				<td>DEPTH IN THE SUBJECT</td>
-				<td><select name="DEPTH">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
+				<td><%=param.getDesc()%></td>
+				<td>
+					<div class="styled-select">
+						<select name="<%= param.getCode() %>">
+						<%for(int i=1;i<=9;i++) {%>
+							<option value="<%= i %>"><%= i %></option>
+						<%} %>
+						</select>
+					</div>
+				</td>
 			</tr>
-
-			<tr>
-				<td>COMMUNICATION SKILL</td>
-				<td><select name="COMM_SKILL">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>CONFIDENCE IN TEACHING</td>
-				<td><select name="CONFIDENCE">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>RELATIONSHIP WITH STUDENT</td>
-				<td><select name="RELATION">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>PATIENCE</td>
-				<td><select name="PATIENCE">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>HOW FREE YOU FEEL TO ASK A QUESTION</td>
-				<td><select name="COMFORT">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>PUNCTUALITY</td>
-				<td><select name="PUNCTUALITY">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>HOW INTERSTING THE TEACHER CLASS IS?</td>
-				<td><select name="INTEREST">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-			<tr>
-				<td>HOW RELEVANT IS THAT NOTES TO STUDY</td>
-				<td><select name="NOTES">
-						<option value="3">GOOD</option>
-						<option value="2">STANDARD</option>
-						<option value="1">BAD</option>
-				</select></td>
-			</tr>
-
-		</table>
-
-		<br> <input type="submit" value="Submit">
+			<%}%>
+			</table>
+		</div>
+		
+		<input type="hidden" name="semSubFacId" value="<%= list.get(0).get("SEM_SUB_FAC_ID") %>" />
+		<input type="submit" value="Submit">
 	</form>
+</div>
+</div>
+	
 
 
 </body>

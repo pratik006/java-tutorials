@@ -6,8 +6,12 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<link rel="shortcut icon" type="image/ico" href="resources/images/favicon.ico" />	
 		<title>Techno India College of Technology</title>		
-		<link href="resources/css/login-styles.css" type="text/css" media="screen" rel="stylesheet" />		<style type="text/css">
-		img, div { behavior: url(iepngfix.htc) }
+		<link href="resources/css/login-styles.css" type="text/css" media="screen" rel="stylesheet" />		
+		<style type="text/css">
+			img, div { behavior: url(iepngfix.htc) }
+			html {
+				background: #63bad8 url(resources/images/bg.jpg) 50% 0px repeat-x;
+			}
 		</style>
 	</head>
 	<body id="login">

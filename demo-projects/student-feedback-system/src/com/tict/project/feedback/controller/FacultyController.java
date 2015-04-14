@@ -39,10 +39,17 @@ public class FacultyController extends AbstractController {
 			List<Subject> subjects = subjectHandler.getSubjectsForFaculty(user.getId());
 			request.setAttribute("subjects", subjects);
 			
-			List<FeedbackConfigParam> results = feedbackHandler.viewFeedback(user.getId());
-			request.setAttribute("results", results);
-			System.out.println(results);
-			view = "WEB-INF/ViewFeedback.jsp";
+			String[][] results;
+			try {
+				results = feedbackHandler.viewFeedback();
+				request.setAttribute("results", results);
+				view = "WEB-INF/ViewFeedback.jsp";
+			} catch (SQLException e) {
+				e.printStackTrace();
+				request.setAttribute("errorMsg", e.getMessage());
+				view = "Error.jsp";
+			}
+			
 		}
 		
 		if(view == null) {

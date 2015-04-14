@@ -32,7 +32,7 @@ public class AuthController extends AbstractController {
 					view = "WEB-INF/Home.jsp";
 				}
 				else if("student".equalsIgnoreCase(user.getType())) {
-					view = "WEB-INF/StudentHome.jsp";
+					view = "WEB-INF/Home.jsp";
 				}
 				else if("faculty".equalsIgnoreCase(user.getType())) {
 					view = "WEB-INF/FacultyHome.jsp";

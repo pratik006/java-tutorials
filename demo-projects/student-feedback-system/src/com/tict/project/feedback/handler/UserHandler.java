@@ -11,7 +11,7 @@ import com.tict.project.feedback.vo.User;
 
 public class UserHandler extends AbstractHandler {
 
-	private String findStudentQuery = "select id, uname, fname, lname, utype from "+FeedbackConsts.SCHEMA+".user where uname = '?'";
+	private String findStudentQuery = "select ID, UNAME, FNAME, LNAME, UTYPE from "+FeedbackConsts.SCHEMA+".USER where uname = '?'";
 	
 	public UserHandler(DatabaseConnector connector) {
 		super(connector);
@@ -34,7 +34,7 @@ public class UserHandler extends AbstractHandler {
 		User existingUser = getUser(user.getUsername());
 		if(existingUser == null) {
 			//New user, need to insert
-			connector.executeUpdate("insert into "+FeedbackConsts.SCHEMA+".user(uname,password,fname,lname,utype) values('"+
+			connector.executeUpdate("insert into "+FeedbackConsts.SCHEMA+".user(UNAME,PASSWORD,FNAME,LNAME,UTYPE) values('"+
 					user.getUsername()+"', 'password', '"+user.getFirstName()+"', '"+user.getLastName()+"', '"+user.getType()+"')");
 		}
 		else {
@@ -46,7 +46,7 @@ public class UserHandler extends AbstractHandler {
 	}
 	
 	public List<User> listUsers(String type) throws SQLException {
-		String query = "select id, uname, fname, lname, utype from "+FeedbackConsts.SCHEMA+".user where utype='"+type+"'";
+		String query = "select ID, UNAME, FNAME, LNAME, UTYPE from "+FeedbackConsts.SCHEMA+".USER where UTYPE='"+type+"'";
 		ResultSet rs = connector.executeQuery(query);
 		List<User> users = new ArrayList<User>();
 		while(rs.next()) {
@@ -58,11 +58,11 @@ public class UserHandler extends AbstractHandler {
 	
 	protected User mapUserFromRS(ResultSet rs) throws SQLException {
 		User user = new User();
-		String fname = rs.getString("fname");
-		String lname = rs.getString("lname");
-		String uname = rs.getString("uname");
-		String type = rs.getString("utype");
-		long id = rs.getLong("id");
+		String fname = rs.getString("FNAME");
+		String lname = rs.getString("LNAME");
+		String uname = rs.getString("UNAME");
+		String type = rs.getString("UTYPE");
+		long id = rs.getLong("ID");
 		user.setFirstName(fname);
 		user.setLastName(lname);
 		user.setUsername(uname);

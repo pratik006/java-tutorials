@@ -66,6 +66,7 @@ public class FeedbackServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
+		String call = request.getParameter("call");
 		String view = "";
 		
 		if("login".equalsIgnoreCase(action)) {
@@ -94,8 +95,15 @@ public class FeedbackServlet extends HttpServlet {
 				}
 			}
 		}
-		System.out.println("forwarding to view: "+view);
-		request.getRequestDispatcher(view).forward(request, response);
+		
+		if(call == "1") {
+			response.getOutputStream().write(view.getBytes());
+			response.getOutputStream().flush();
+		}
+		else {
+			System.out.println("forwarding to view: "+view);
+			request.getRequestDispatcher(view).forward(request, response);
+		}
 	}
 
 	private User getUserInfo(HttpServletRequest req) {

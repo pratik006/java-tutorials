@@ -3,9 +3,11 @@ package com.tict.project.feedback.db;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class DatabaseConnector {
@@ -36,6 +38,16 @@ public class DatabaseConnector {
 	public void executeUpdate(String query) throws SQLException {
 		System.out.println("executeUpdate query: "+query);
 		stmt.executeUpdate(query);
+	}
+	
+	public ResultSet prepareStatement(String query, Object[] params) throws SQLException {
+		PreparedStatement pstmt = connection.prepareStatement(query);
+		int ctr = 0;
+		for(Object param : params) {
+			pstmt.setObject(++ctr, param);
+		}
+		System.out.println("query: "+query+"\nparams: "+Arrays.toString(params));
+		return pstmt.executeQuery();
 	}
 	
 	public void close() throws SQLException {

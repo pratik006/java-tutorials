@@ -18,7 +18,8 @@ public class FacultyHandler extends UserHandler {
 	public void addFaculty(User faculty, List<String[]> subjects) throws SQLException {
 		try {
 			saveUser(faculty);
-			String query = "insert into "+FeedbackConsts.SCHEMA+".FAC....";
+			String query = "insert into "+FeedbackConsts.SCHEMA+".USER(UNAME, PASSWORD,FNAME,LNAME,UTYPE) VALUES('"
+			+faculty.getUsername()+"', 'PASSWORD', '"+faculty.getFirstName()+"', '"+faculty.getLastName()+"', '"+FeedbackConsts.ROLE_FACULTY+"')";
 			connector.executeUpdate(query);
 			connector.commit();
 		}
@@ -30,7 +31,7 @@ public class FacultyHandler extends UserHandler {
 	}
 	
 	public List<User> getAllFaculties() {
-		String query = "select * from "+FeedbackConsts.SCHEMA+".USER WHERE UTYPE='FACULTY'";
+		String query = "select * from "+FeedbackConsts.SCHEMA+".USER WHERE UTYPE='"+FeedbackConsts.ROLE_FACULTY+"'";
 		List<User> faculties = new ArrayList<User>();
 		try {
 			ResultSet rs = connector.executeQuery(query);
@@ -42,5 +43,15 @@ public class FacultyHandler extends UserHandler {
 			e.printStackTrace();
 		}
 		return faculties;
+	}
+	
+	String facForSubCourseQuery = "select * from FEEDBACK.USER where ID=(select FACULTY_ID from "+FeedbackConsts.SCHEMA+".FAC_SUB_COURSE_XREF where SUBJECT_ID=? and course_id=(select COURSE_ID from feedback.STUDENT_COURSE_ENROLL where student_id=?))";
+	public User getFaculty(long subjectId, long studentId) throws SQLException {
+		ResultSet rs = connector.prepareStatement(facForSubCourseQuery, new Object[]{subjectId, studentId});
+		if(rs.next()) {
+			User faculty = mapUserFromRS(rs);
+			return faculty;
+		}
+		return null;
 	}
 }

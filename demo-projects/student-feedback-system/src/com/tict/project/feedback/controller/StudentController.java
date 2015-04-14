@@ -3,12 +3,14 @@ package com.tict.project.feedback.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tict.project.feedback.vo.Course;
+import com.tict.project.feedback.vo.FeedbackConfigParam;
 import com.tict.project.feedback.vo.Subject;
 import com.tict.project.feedback.vo.User;
 
@@ -32,7 +34,21 @@ public class StudentController extends AbstractController {
 			request.setAttribute("subjects", subjects);
 			List<Course> courses = courseHandler.getAllCourse();
 			request.setAttribute("courses", courses);
-			view = "WEB-INF/StudentFeedback.jsp";
+			List<FeedbackConfigParam> feedbackParams = feedbackHandler.getConfigParams();
+			request.setAttribute("params", feedbackParams);
+			
+			try {
+				String subjectId = request.getParameter("subjectId");
+				String facultyId = request.getParameter("facultyId");
+				System.out.println("subjectID: "+subjectId);
+				List<Map<String, String>> map = feedbackHandler.getFeedbackSubjects(user.getId(), subjectId, facultyId);
+				request.setAttribute("map", map);
+				view = "WEB-INF/StudentFeedback.jsp";
+			} catch (SQLException e) {
+				e.printStackTrace();
+				view = "Error.jsp";
+			}
+			
 		}
 		else if("saveFeedback".equals(action)) {
 			try {
@@ -44,6 +60,16 @@ public class StudentController extends AbstractController {
 				view = "Error.jsp";
 			}
 			
+		}
+		else if("getFacForSub".equals(action)) {
+			long subjectId = Integer.parseInt(request.getParameter("subjectId"));
+			User faculty;
+			try {
+				faculty = facultyHandler.getFaculty(subjectId, user.getId());
+				request.setAttribute("faculty", faculty);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(view == null) {
