@@ -35,9 +35,14 @@ public class DatabaseConnector {
 		return stmt.executeQuery(query);
 	}
 	
-	public void executeUpdate(String query) throws SQLException {
+	public int executeUpdate(String query) throws SQLException {
 		System.out.println("executeUpdate query: "+query);
-		stmt.executeUpdate(query);
+		return stmt.executeUpdate(query);
+	}
+	
+	public int createNew(String query) throws SQLException {
+		System.out.println("createNew query: "+query);
+		return stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 	}
 	
 	public ResultSet prepareStatement(String query, Object[] params) throws SQLException {

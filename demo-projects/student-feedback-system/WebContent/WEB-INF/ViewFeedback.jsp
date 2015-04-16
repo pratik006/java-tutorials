@@ -12,7 +12,7 @@
 </head>
 <body>
 	<b>Feedback Result</b>
-	<div style="overflow: auto; max-height: 500px;">
+	<div  class="viewFeedback">
 		<table>
 			<% String[][] results = (String[][])request.getAttribute("results");
 			if(results != null && results.length>0) {

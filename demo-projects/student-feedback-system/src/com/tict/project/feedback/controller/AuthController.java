@@ -51,6 +51,9 @@ public class AuthController extends AbstractController {
 			request.getSession().invalidate();
 			view = FeedbackConsts.LOGIN_PAGE;
 		}
+		else {
+			view = handleDefaultRequest(request, response);
+		}
 		
 		if(view == null) {
 			System.err.println("AuthController -> Cannot handle this request. action: "+action);

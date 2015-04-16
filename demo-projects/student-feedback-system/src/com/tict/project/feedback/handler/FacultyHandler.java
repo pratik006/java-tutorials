@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.db.DatabaseConnector;
+import com.tict.project.feedback.vo.Faculty;
+import com.tict.project.feedback.vo.SemesterSubject;
 import com.tict.project.feedback.vo.User;
 
 public class FacultyHandler extends UserHandler {
@@ -15,13 +17,24 @@ public class FacultyHandler extends UserHandler {
 		super(connector);
 	}
 	
-	public void addFaculty(User faculty, List<String[]> subjects) throws SQLException {
+	public int addFaculty(Faculty faculty, List<String[]> subjects) throws SQLException {
 		try {
-			saveUser(faculty);
-			String query = "insert into "+FeedbackConsts.SCHEMA+".USER(UNAME, PASSWORD,FNAME,LNAME,UTYPE) VALUES('"
-			+faculty.getUsername()+"', 'PASSWORD', '"+faculty.getFirstName()+"', '"+faculty.getLastName()+"', '"+FeedbackConsts.ROLE_FACULTY+"')";
-			connector.executeUpdate(query);
+			//saveUser(faculty);
+			String query = "insert into "+FeedbackConsts.SCHEMA+".USER(ID, UNAME, PASSWORD,FNAME,LNAME,UTYPE) VALUES("
+			+faculty.getUsername()+", '"+faculty.getUsername()+"', 'PASSWORD', '"+faculty.getFirstName()+"', '"+faculty.getLastName()+"', '"+FeedbackConsts.ROLE_FACULTY+"');";
+			
+			long facultyId = connector.createNew(query);
+			query = "";
+			for(SemesterSubject ss : faculty.getSemesterSubjects()) {
+				query += "insert into "+FeedbackConsts.SCHEMA+".SEMESTER_SUBJECT_FACULTY(SEMESTER_ID, SUBJECT_ID, FACULTY_ID) VALUES("
+						+ ss.getSemesterId() + ", "
+						+ ss.getSubjectId() + ", "						
+						+ faculty.getUsername()					
+						+ ");";
+			}			
+			int resp = connector.executeUpdate(query);
 			connector.commit();
+			return resp;
 		}
 		catch(SQLException ex) {
 			ex.printStackTrace();

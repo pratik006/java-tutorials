@@ -7,6 +7,11 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String type;
+	private String email;
+	private String dob;
+	private String caste;
+	private String gender;
+	private String nationality;
 	
 	public long getId() {
 		return id;
@@ -37,6 +42,36 @@ public class User {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getDob() {
+		return dob;
+	}
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+	public String getCaste() {
+		return caste;
+	}
+	public void setCaste(String caste) {
+		this.caste = caste;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getNationality() {
+		return nationality;
+	}
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 	
 }

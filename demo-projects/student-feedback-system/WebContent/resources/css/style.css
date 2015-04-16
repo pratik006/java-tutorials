@@ -4,6 +4,7 @@ table>tbody>tr>td {
 	border-collapse: collapse;
 	text-align: left;
 	padding-left: 10px;
+	height: 30px;
 }
 
 table>tbody>tr {
@@ -40,3 +41,19 @@ table {
    background: url(resources/images/new_arrow.png) no-repeat right #ddd;
    border: 1px solid #ccc;
 } */
+
+body>div {
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+}
+
+.error {
+	color: red;
+}
+
+.viewFeedback {
+	width: 100%;
+	overflow: auto; 
+	max-height: 500px;	
+}

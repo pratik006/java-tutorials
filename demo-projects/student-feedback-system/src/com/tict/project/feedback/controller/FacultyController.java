@@ -51,7 +51,9 @@ public class FacultyController extends AbstractController {
 			}
 			
 		}
-		
+		else {
+			view = handleDefaultRequest(request, response);
+		}
 		if(view == null) {
 			System.err.println("FacultyController -> Cannot handle this request. action: "+action);
 		}

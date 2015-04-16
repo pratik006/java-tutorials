@@ -71,7 +71,38 @@ public class StudentController extends AbstractController {
 				e.printStackTrace();
 			}
 		}
-		
+		else if("changePasswordView".equals(action)) {
+			view = changePassword();
+		}
+		else if("changePassword".equals(action)) {
+			String oldPassword = request.getParameter("currentPassword");
+			String newPassword = request.getParameter("newPassword");
+			String confirmNewPassword = request.getParameter("confirmNewPassword");
+			if(newPassword.equals(confirmNewPassword)) {
+				try {
+					boolean resp = userHandler.changePassword(user.getUsername(), oldPassword, newPassword);
+					if(resp) {
+						addMsg(request, "Password successfully changes.");
+						view = "WEB-INF/Home.jsp";
+					}
+					else {
+						addMsg(request, "Invalid Credentials");
+						view = "WEB-INF/Home.jsp";
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+					addErrorMsg(request, "Error Occurred.");
+					view = "WEB-INF/Home.jsp";
+				}
+			}
+			else {
+				addErrorMsg(request, "Your passwords donot match");
+				view = "WEB-INF/ChangePassword.jsp";
+			}
+		}
+		else {
+			view = handleDefaultRequest(request, response);
+		}
 		if(view == null) {
 			System.err.println("StudentController -> Cannot handle this request. action: "+action);
 		}

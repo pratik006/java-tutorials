@@ -11,7 +11,7 @@
 
 </head>
 <body>
-
+	<div>
 	<form action="./FeedbackServlet" method="post">
 		<input type="hidden" name="action" value="saveFaculty" />
 		<table>
@@ -26,6 +26,17 @@
 				<td><input type="text" name="username" /></td>
 				<td>Type</td>
 				<td><input type="text" name="utype" value="FACULTY" readonly="readonly" /></td>
+			</tr>
+			<tr>
+				<td>Gender</td>
+				<td>
+					<select name="gender">
+						<option value="M">Male</option>
+						<option value="F">Female</option>
+					</select>
+				</td>
+				<td>Email</td>
+				<td><input type="text" name="email" /></td>
 			</tr>
 		</table>
 		
@@ -45,12 +56,18 @@
 				<td>Semester</td>
 				<td>
 					<select name="semester">
-						<option value="semester1">Semester 1</option>
-						<option value="semester2">Semester 2</option>
-						<option value="semester3">Semester 3</option>
-						<option value="semester4">Semester 4</option>
-						<option value="semester5">Semester 5</option>
-						<option value="semester6">Semester 6</option>
+						<option value="1">Mca Semester 1</option>
+						<option value="2">Mca Semester 2</option>
+						<option value="3">Mca Semester 3</option>
+						<option value="4">Mca Semester 4</option>
+						<option value="5">Mca Semester 5</option>
+						<option value="6">Mca Semester 6</option>
+						<option value="7">Bca Semester 1</option>
+						<option value="8">Bca Semester 2</option>
+						<option value="9">Bca Semester 3</option>
+						<option value="10">Bca Semester 4</option>
+						<option value="11">Bca Semester 5</option>
+						<option value="12">Bca Semester 6</option>
 					</select>
 				</td>
 				<td>Subject</td>
@@ -69,5 +86,6 @@
 		
 		<input type="submit" value="Add Faculty" />
 	</form>
+	</div>
 </body>
 </html>

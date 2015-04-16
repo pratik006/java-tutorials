@@ -50,9 +50,21 @@ public abstract class AbstractController {
 		request.setAttribute(FeedbackConsts.ERROR_MSG, msg);
 	}
 	
+	protected void addMsg(HttpServletRequest request, String msg) {
+		request.setAttribute(FeedbackConsts.MSG, msg);
+	}
+	
 	protected String getAction(HttpServletRequest request) {
 		String action = request.getParameter("action");
 		return action;
+	}
+	
+	public String handleDefaultRequest(HttpServletRequest request, HttpServletResponse response) {
+		return "WEB-INF/Home.jsp";
+	}
+	
+	public String changePassword() {
+		return "WEB-INF/ChangePassword.jsp";
 	}
 	
 }

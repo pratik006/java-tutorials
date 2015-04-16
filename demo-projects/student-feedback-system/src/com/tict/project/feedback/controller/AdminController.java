@@ -1,16 +1,27 @@
 package com.tict.project.feedback.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.vo.Course;
+import com.tict.project.feedback.vo.Faculty;
+import com.tict.project.feedback.vo.SemesterSubject;
 import com.tict.project.feedback.vo.Student;
 import com.tict.project.feedback.vo.Subject;
 import com.tict.project.feedback.vo.User;
@@ -132,19 +143,28 @@ public class AdminController extends AbstractController {
 		}
 		else if("saveFaculty".equals(action)) {
 			if(user != null && FeedbackConsts.ROLE_ADMIN.equals(user.getType())) {
-				User faculty = new User();
+				Faculty faculty = new Faculty();
 				String fname = request.getParameter("fname");
 				String lname = request.getParameter("lname");
 				String type = request.getParameter("utype");
 				String username = request.getParameter("username");
+				String gender = request.getParameter("gender");
+				String email = request.getParameter("email");
 				faculty.setFirstName(fname);
 				faculty.setLastName(lname);
 				faculty.setType(type);
 				faculty.setUsername(username);
+				if(gender != null && gender.length() > 0) {
+					faculty.setGender(gender);
+				}
+				if(email != null && email.length() > 0) {
+					faculty.setEmail(email);
+				}
 				System.out.println(Arrays.toString(request.getParameterValues("courseId")));
 				System.out.println(Arrays.toString(request.getParameterValues("semester")));
 				System.out.println(Arrays.toString(request.getParameterValues("subject")));
 				List<String[]> subjects = new ArrayList<String[]>();
+				List<SemesterSubject> semesterSubjects = new ArrayList<SemesterSubject>();
 				for(int i=0;i<request.getParameterValues("courseId").length;i++) {
 					if(request.getParameterValues("courseId")[i] != null && request.getParameterValues("courseId")[i].length() > 0) {
 						if(request.getParameterValues("semester")[i] != null && request.getParameterValues("semester")[i].length() > 0) {
@@ -155,11 +175,17 @@ public class AdminController extends AbstractController {
 								str[2] = request.getParameterValues("subject")[i];
 								System.out.println(str[0]+", "+str[1]+", "+str[2]);
 								subjects.add(str);
+								
+								SemesterSubject ss = new SemesterSubject();
+								ss.setSemesterId(Integer.parseInt(str[1]));
+								ss.setSubjectId(Integer.parseInt(str[2]));
+								semesterSubjects.add(ss);
 							}
 						}
 					}					
 				}
 				try {
+					faculty.setSemesterSubjects(semesterSubjects);
 					facultyHandler.addFaculty(faculty, subjects);
 					request.setAttribute("msg", "Faculty Added Successfully.");
 					view = "WEB-INF/Home.jsp";
@@ -176,6 +202,72 @@ public class AdminController extends AbstractController {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		else if("addStudentsPage".equals(action)) {
+			view = "WEB-INF/AddStudents.jsp";
+		}		
+		else if("uploadStudents".equals(action)) {
+			if( ServletFileUpload.isMultipartContent(request)) {
+				try{ 
+					// Create a factory for disk-based file items
+					DiskFileItemFactory factory = new DiskFileItemFactory();
+
+					// Configure a repository (to ensure a secure temp location is used)
+					/*ServletContext servletContext = request.getServletConfig().getServletContext();
+					File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+					factory.setRepository(repository);*/
+
+					// Create a new file upload handler
+					ServletFileUpload upload = new ServletFileUpload(factory);
+				      // Parse the request to get file items.
+				      List fileItems = upload.parseRequest(request);
+					
+				      // Process the uploaded file items
+				      Iterator i = fileItems.iterator();
+
+				      while ( i.hasNext () ) 
+				      {
+				         FileItem fi = (FileItem)i.next();
+				         if ( !fi.isFormField () )	
+				         {
+				            // Get the uploaded file parameters
+				            BufferedReader reader = new BufferedReader(new InputStreamReader(fi.getInputStream()));
+				            String line = null;
+				            StringBuilder query = new StringBuilder();
+				            reader.readLine();
+				            while((line = reader.readLine()) != null) {
+				            	String attrs[] = line.split(",");
+				            	query.append("insert into "+FeedbackConsts.SCHEMA+".USER(ID, UNAME, UTYPE, FNAME, LNAME, GENDER, CASTE, NATIONALITY, DOB, EMAIL) VALUES(");
+				            			query.append(attrs[1]+", ");
+				            			query.append(attrs[1]+", ");
+				            			query.append("'STUDENT', ");
+				            			query.append("'"+attrs[2]+"', ");
+				            			query.append("'"+attrs[3]+"', ");
+				            			query.append("'"+attrs[4]+"', ");
+				            			query.append("'"+attrs[5]+"', ");
+				            			query.append("'"+attrs[6]+"', ");
+				            			query.append("STR_TO_DATE('"+attrs[7]+"', '%d/%m/%Y'), ");
+				            			query.append("'"+attrs[8]+"'");
+				            			query.append(");");
+				            }
+				            System.out.println("query: "+query);
+				            int updatedRowCount = connector.executeUpdate(query.toString());
+				            if(updatedRowCount > 1) {
+				            	request.setAttribute(FeedbackConsts.MSG, "Students added successfully.");
+				            }
+				         }
+				      }
+				      
+				      view = "WEB-INF/Home.jsp";
+				}
+				catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+		else {
+			System.out.println("cannot handle action: "+action+", fallling to default view");
+			view = handleDefaultRequest(request, response);
 		}
 		return view;
 	}

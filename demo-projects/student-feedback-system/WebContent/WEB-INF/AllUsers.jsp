@@ -12,8 +12,8 @@
 <body>
 <table>
 	<% List<User> students = (List<User>)request.getAttribute("users"); %>
-	<% for(User user : students){ %>
-	<tr><td><a href="./FeedbackServlet?action=viewUser&uname=<%=user.getUsername()%>"><%=user.getFirstName()%> <%=user.getLastName() %></a></a></td></tr>
+	<% for(User student : students){ %>
+	<tr><td><a href="./FeedbackServlet?action=viewUser&uname=<%=student.getUsername()%>"><%=student.getFirstName()%> <%=student.getLastName() %></a></a></td></tr>
 	<%} %>
 </table>
 </body>

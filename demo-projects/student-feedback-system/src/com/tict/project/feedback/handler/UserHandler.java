@@ -11,7 +11,7 @@ import com.tict.project.feedback.vo.User;
 
 public class UserHandler extends AbstractHandler {
 
-	private String findStudentQuery = "select ID, UNAME, FNAME, LNAME, UTYPE from "+FeedbackConsts.SCHEMA+".USER where uname = '?'";
+	private String findStudentQuery = "select ID, UNAME, FNAME, LNAME, UTYPE,EMAIL,DOB,CASTE,GENDER,NATIONALITY from "+FeedbackConsts.SCHEMA+".USER where uname = '?'";
 	
 	public UserHandler(DatabaseConnector connector) {
 		super(connector);
@@ -34,7 +34,7 @@ public class UserHandler extends AbstractHandler {
 		User existingUser = getUser(user.getUsername());
 		if(existingUser == null) {
 			//New user, need to insert
-			connector.executeUpdate("insert into "+FeedbackConsts.SCHEMA+".user(UNAME,PASSWORD,FNAME,LNAME,UTYPE) values('"+
+			connector.executeUpdate("insert into "+FeedbackConsts.SCHEMA+".USER(UNAME,PASSWORD,FNAME,LNAME,UTYPE) values('"+
 					user.getUsername()+"', 'password', '"+user.getFirstName()+"', '"+user.getLastName()+"', '"+user.getType()+"')");
 		}
 		else {
@@ -68,6 +68,21 @@ public class UserHandler extends AbstractHandler {
 		user.setUsername(uname);
 		user.setId(id);
 		user.setType(type);
+		user.setEmail(rs.getString("EMAIL"));
+		user.setDob(rs.getString("DOB"));
+		user.setCaste(rs.getString("CASTE"));
+		user.setGender(rs.getString("GENDER"));
+		user.setNationality(rs.getString("NATIONALITY"));
 		return user;
+	}
+	
+	public boolean changePassword(String username, String oldPassword, String newPassword) throws SQLException {
+		String query = "UPDATE "+FeedbackConsts.SCHEMA+".USER SET PASSWORD='"+newPassword+"' WHERE UNAME='"+username+"' and PASSWORD='"+oldPassword+"'";
+		int response = connector.executeUpdate(query);
+		if(response == 1) {
+			connector.commit();
+			return true;
+		}
+		return false;
 	}
 }

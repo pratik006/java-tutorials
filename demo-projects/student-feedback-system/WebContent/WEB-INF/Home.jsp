@@ -7,5 +7,31 @@
 <title>Student Home</title>
 </head>
 <body>
+
+<div>
+	<div class="error">${errorMsg}</div>
+	<div>${msg}</div>
+	<table style="width: 98%;">
+		<tr>
+			<td colspan="2" style="text-align: center;">Your Profile Details</td>
+		</tr>
+		<tr>
+			<td>Name: ${user.firstName} ${user.lastName}</td><td>username: ${userName}</td>
+		</tr>
+		<tr>
+			<td>email: ${user.email}</td><td>Date of Birth: ${user.dob} </td>
+		</tr>
+		<tr>
+			<td>Gender: ${user.gender} </td><td>Caste: ${user.caste}</td>
+		</tr>
+		<tr>
+			<td>Nationality: ${user.nationality}</td><td></td>
+		</tr>
+		<tr>
+			<td colspan="2"><a href="./FeedbackServlet?action=changePasswordView">change your password</a></td>
+		</tr>
+	</table>
+</div>
+
 </body>
 </html>
