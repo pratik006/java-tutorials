@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.vo.Course;
 import com.tict.project.feedback.vo.Faculty;
@@ -189,7 +190,11 @@ public class AdminController extends AbstractController {
 					facultyHandler.addFaculty(faculty, subjects);
 					request.setAttribute("msg", "Faculty Added Successfully.");
 					view = "WEB-INF/Home.jsp";
-				} catch (SQLException e) {
+				} catch (MySQLIntegrityConstraintViolationException e1) {
+					e1.printStackTrace();
+					request.setAttribute(FeedbackConsts.ERROR_MSG, "Entry already existing with same name. Cannot add Faculty");
+					view = "WEB-INF/Home.jsp";
+				}catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}

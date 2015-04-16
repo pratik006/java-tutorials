@@ -4,14 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.db.DatabaseConnector;
+import com.tict.project.feedback.vo.Course;
+import com.tict.project.feedback.vo.Faculty;
 import com.tict.project.feedback.vo.FeedbackConfigParam;
+import com.tict.project.feedback.vo.Subject;
 
 public class FeedbackHandler {
 
@@ -79,12 +84,12 @@ public class FeedbackHandler {
 		return arr;
 	}
 	
-	public List<Map<String, String>> getFeedbackSubjects(Long studentId, String subjectId, String facultyId) throws SQLException {
+	public Map getFeedbackSubjects(Long studentId, String subjectId, String facultyId) throws SQLException {
 		String query = null;
-		if(null != subjectId) {
+		if(null != subjectId && !subjectId.equalsIgnoreCase("select")) {
 			query = FeedbackConsts.QUERY_STUDENT_SUBJECTS_FACULTY.replaceAll("\\?", ""+studentId)+" AND T3.ID="+subjectId;
 		}
-		if(null != facultyId) {
+		else if(null != facultyId && !facultyId.equalsIgnoreCase("select")) {
 			query = FeedbackConsts.QUERY_STUDENT_SUBJECTS_FACULTY.replaceAll("\\?", ""+studentId)+" AND T4.ID="+facultyId;
 		}
 		else {
@@ -92,11 +97,22 @@ public class FeedbackHandler {
 		}
 		
 		
-		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
-		
+		//List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		Set<Subject> subjects = new HashSet<Subject>();
+		Set<Faculty> faculties = new HashSet<Faculty>();
+		Set<Course> courses = new HashSet<Course>();
+		Map response = new HashMap();
+		Long semSubFacId = null;
 		ResultSet rs = connector.executeQuery(query);
 		while(rs.next()) {
-			Map<String,String> map = new HashMap<String, String>();
+			Subject subject = new Subject(rs.getLong("SUBJECT_ID"), rs.getString("SUBJECT_NAME"));
+			subjects.add(subject);
+			Faculty faculty = new Faculty(rs.getLong("FACULTY_ID"), rs.getString("FNAME"), rs.getString("LNAME"));
+			System.out.println("adding faculty : "+faculty+"\t"+faculties.add(faculty));
+			Course course = new Course(rs.getLong("COURSE_ID"), rs.getString("COURSE_NAME"));
+			courses.add(course);
+			semSubFacId = rs.getLong("SEM_SUB_FAC_ID");
+			/*Map<String,String> map = new HashMap<String, String>();
 			map.put("SUBJECT_ID", ""+rs.getLong("SUBJECT_ID"));
 			map.put("SUBJECT_NAME", rs.getString("SUBJECT_NAME"));
 			map.put("FACULTY_ID", ""+rs.getLong("FACULTY_ID"));			
@@ -105,9 +121,13 @@ public class FeedbackHandler {
 			map.put("SEM_SUB_FAC_ID", ""+rs.getLong("SEM_SUB_FAC_ID"));
 			map.put("COURSE_ID", ""+rs.getLong("COURSE_ID"));
 			map.put("COURSE_NAME", ""+rs.getString("COURSE_NAME"));
-			list.add(map);
+			list.add(map);*/
 		}
-		return list;
+		response.put("subjects", subjects);
+		response.put("faculties", faculties);
+		response.put("courses", courses);
+		response.put("SEM_SUB_FAC_ID", semSubFacId);
+		return response;
 	}
 	
 	public void saveFeedback(HttpServletRequest request, long studentId) throws SQLException {

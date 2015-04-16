@@ -5,6 +5,15 @@ public class Subject {
 	private long id;
 	private String name;
 	
+	public Subject() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Subject(long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -16,5 +25,9 @@ public class Subject {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int hashCode() {
+		return (int)id;
 	}
 }

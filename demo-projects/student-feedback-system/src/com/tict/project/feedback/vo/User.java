@@ -1,6 +1,7 @@
 package com.tict.project.feedback.vo;
 
 public class User {
+	
 
 	private long id;
 	private String username;
@@ -12,6 +13,16 @@ public class User {
 	private String caste;
 	private String gender;
 	private String nationality;
+	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public User(long id, String fname, String lname) {
+		this.id = id;
+		this.firstName = fname;
+		this.lastName = lname;
+	}
 	
 	public long getId() {
 		return id;
@@ -73,5 +84,21 @@ public class User {
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
 	}
-	
+	public int hashCode() {
+		return (int)id;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	public boolean equals(Object o) {
+		if(o != null && o instanceof User) {
+			User temp = (User) o;
+			if(id == temp.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

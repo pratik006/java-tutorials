@@ -40,9 +40,15 @@ public class DatabaseConnector {
 		return stmt.executeUpdate(query);
 	}
 	
-	public int createNew(String query) throws SQLException {
+	public long createNew(String query) throws SQLException {
 		System.out.println("createNew query: "+query);
-		return stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+		long id = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+		ResultSet rs = stmt.getGeneratedKeys();
+		if(rs.next()) {
+			id = rs.getLong(1);
+		}
+		rs.close();
+		return id;
 	}
 	
 	public ResultSet prepareStatement(String query, Object[] params) throws SQLException {

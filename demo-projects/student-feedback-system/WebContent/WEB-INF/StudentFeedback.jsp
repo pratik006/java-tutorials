@@ -1,4 +1,5 @@
-<%@page import="java.util.Map"%>
+<%@page import="com.tict.project.feedback.vo.Faculty"%>
+<%@page import="java.util.Set"%>
 <%@page import="com.tict.project.feedback.vo.FeedbackConfigParam"%>
 <%@page import="com.tict.project.feedback.vo.Course"%>
 <%@page import="com.tict.project.feedback.vo.Subject"%>
@@ -19,25 +20,23 @@
 
 		<form action="./FeedbackServlet?action=addFeedback" method="post">
 		
+		<%
+		Set<Course> courses = (Set<Course>)request.getAttribute("courses");
+		Set<Subject> subjects = (Set<Subject>)request.getAttribute("subjects");
+		Set<Faculty> faculties = (Set<Faculty>)request.getAttribute("faculties");
+		%>
+		
 		<div>
 		<table style="width: 90%;">
 			<tr>
 				<td>COURSE:</td>
 				<td>
 					<select name="courseId">
-					<%-- <% 
-					List<Course> list = (List<Course>)request.getAttribute("courses");
-					for(Course course : courses) { 
-					%>
-					<option value="<%=course.getId()%>"><%= course.getName() %></option>
-					<%} %> --%>
 					<%
-					List<Map<String, String>> list = (List<Map<String, String>>)request.getAttribute("map");
-					 int ctr = 0;
-					 /*for(ctr = 0;ctr<list.size();ctr++) {*/
-						Map<String, String> map = list.get(0); 
+					 for(Course course : courses) {					  
 					%>
-					<option value="<%= map.get("COURSE_ID") %>"><%= map.get("COURSE_NAME") %></option>
+						<option value="<%= course.getId() %>"><%= course.getName() %></option>
+					<%} %>
 					</select>
 				</td>
 			
@@ -45,15 +44,14 @@
 				<td>
 					<select name="subjectId" onchange="this.form.submit();">
 						<%
-						if(list.size() > 1) {
+						if(subjects.size() > 1) {
 						%>
 						<option>Select</option>
 						<% } %>
 						<% 
-						for(ctr = 0;ctr<list.size();ctr++) {
-							map = list.get(ctr);
+						for(Subject subject : subjects) {
 						%>
-						<option value="<%= map.get("SUBJECT_ID") %>"><%= map.get("SUBJECT_NAME") %></option>
+						<option value="<%= subject.getId() %>"><%= subject.getName() %></option>
 						<%} %>
 					</select>
 				</td>
@@ -63,15 +61,14 @@
 				<td>
 					<select name="facultyId" onchange="this.form.submit();">
 						<%
-						if(list.size() > 1) {
+						if(faculties.size() > 1) {
 						%>
 						<option>Select</option>
 						<% } %>
 						<% 
-						for(ctr = 0;ctr<list.size();ctr++) {
-							map = list.get(ctr);
+						for(Faculty faculty : faculties) {
 						%>
-						<option value="<%= map.get("FACULTY_ID") %>"><%= map.get("FNAME") %> <%= map.get("LNAME") %></option>
+						<option value="<%= faculty.getId() %>"><%= faculty.getFirstName() %> <%= faculty.getLastName() %></option>
 						<%} %>
 					</select>
 				</td>
@@ -108,7 +105,7 @@
 			</table>
 		</div>
 		
-		<input type="hidden" name="semSubFacId" value="<%= list.get(0).get("SEM_SUB_FAC_ID") %>" />
+		<input type="hidden" name="semSubFacId" value="<%= request.getAttribute("SEM_SUB_FAC_ID") %>" />
 		<input type="submit" value="Submit">
 	</form>
 </div>

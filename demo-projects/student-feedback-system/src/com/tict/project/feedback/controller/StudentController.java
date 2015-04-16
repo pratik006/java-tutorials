@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +29,12 @@ public class StudentController extends AbstractController {
 		String view = null;
 		
 		if("addFeedback".equals(action)) {
-			List<User> faculties = facultyHandler.getAllFaculties();
+			/*List<User> faculties = facultyHandler.getAllFaculties();
 			request.setAttribute("faculties", faculties);
 			List<Subject> subjects = subjectHandler.getAllSubjects();
 			request.setAttribute("subjects", subjects);
 			List<Course> courses = courseHandler.getAllCourse();
-			request.setAttribute("courses", courses);
+			request.setAttribute("courses", courses);*/
 			List<FeedbackConfigParam> feedbackParams = feedbackHandler.getConfigParams();
 			request.setAttribute("params", feedbackParams);
 			
@@ -41,8 +42,10 @@ public class StudentController extends AbstractController {
 				String subjectId = request.getParameter("subjectId");
 				String facultyId = request.getParameter("facultyId");
 				System.out.println("subjectID: "+subjectId);
-				List<Map<String, String>> map = feedbackHandler.getFeedbackSubjects(user.getId(), subjectId, facultyId);
-				request.setAttribute("map", map);
+				Map map = feedbackHandler.getFeedbackSubjects(user.getId(), subjectId, facultyId);
+				request.setAttribute("courses", map.get("courses"));
+				request.setAttribute("subjects", map.get("subjects"));
+				request.setAttribute("faculties", map.get("faculties"));
 				view = "WEB-INF/StudentFeedback.jsp";
 			} catch (SQLException e) {
 				e.printStackTrace();
