@@ -1,7 +1,6 @@
 package com.tict.project.feedback.handler;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,50 +36,21 @@ public class FeedbackHandler {
 		return feedbackConfigParams;
 	}
 	
-	/*public List<FeedbackConfigParam> viewFeedback(long facultyId) {
-		List<FeedbackConfigParam> result = new ArrayList<FeedbackConfigParam>();
-		try {
-			String query = "select t2.id, t2.attribute ,t2.attribute_desc , avg(t1.EVALUATION) evaluation"+ 
-					" from feedback.feedback t1, feedback.feedback_config t2"+ 
-					" group by t1.feedback_config_id,t2.id,t2.attribute_Desc having fac_sub_course_id = (select fac_sub_course_id  from feedback.fac_sub_course_xref  where faculty_id = "+facultyId+")"+
-					" and t1.feedback_config_id=t2.id"+
-					" order by t2.id";
-			ResultSet rs = connector.executeQuery(query);
-			
-			while(rs.next()) {
-				FeedbackConfigParam param = new FeedbackConfigParam();
-				param.setId(rs.getLong("ID"));
-				param.setDesc(rs.getString("attribute_desc"));
-				param.setCode(rs.getString("attribute"));
-				param.setScore(rs.getFloat("evaluation"));
-				result.add(param);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}*/
-	
 	public String[][] viewFeedback() throws SQLException {
 		ResultSet rs = connector.executeQuery(FeedbackConsts.QUERY_VIEW_FEEDBACK);
-		ResultSetMetaData rsm = rs.getMetaData();
 		Map<String, Map<String, String>> facultyMap = new HashMap<String, Map<String, String>>();
 		while(rs.next()) 
 		{
-			for(int i=1;i<=3;i++) {
-				String facultyName = rs.getString(1);
-				Map<String, String> subMap = null;
-				if(!facultyMap.containsKey(facultyName)) {
-					subMap = new HashMap<String, String>();
-					facultyMap.put(facultyName, subMap);
-				}
-				else {
-					subMap = facultyMap.get(facultyName);
-				}
-				
-				String key = rs.getString(2);
-				subMap.put(rs.getString(2), rs.getString(3));
+			String facultyName = rs.getString(1);
+			Map<String, String> subMap = null;
+			if(!facultyMap.containsKey(facultyName)) {
+				subMap = new HashMap<String, String>();
+				facultyMap.put(facultyName, subMap);
 			}
+			else {
+				subMap = facultyMap.get(facultyName);
+			}
+			subMap.put(rs.getString(2), rs.getString(3));
 		}
 		int length = facultyMap.keySet().size()+1;
 		int width = -1;
