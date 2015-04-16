@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.omg.CORBA.Request;
-
 import com.tict.project.feedback.consts.FeedbackConsts;
 import com.tict.project.feedback.db.DatabaseConnector;
 import com.tict.project.feedback.vo.Faculty;

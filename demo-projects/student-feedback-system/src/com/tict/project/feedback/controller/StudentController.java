@@ -46,6 +46,7 @@ public class StudentController extends AbstractController {
 				request.setAttribute("courses", map.get("courses"));
 				request.setAttribute("subjects", map.get("subjects"));
 				request.setAttribute("faculties", map.get("faculties"));
+				request.setAttribute("SEM_SUB_FAC_ID", map.get("SEM_SUB_FAC_ID"));
 				view = "WEB-INF/StudentFeedback.jsp";
 			} catch (SQLException e) {
 				e.printStackTrace();
