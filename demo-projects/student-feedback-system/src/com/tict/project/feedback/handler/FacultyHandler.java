@@ -21,16 +21,17 @@ public class FacultyHandler extends UserHandler {
 		String query = "insert into "+FeedbackConsts.SCHEMA+".USER(UNAME, PASSWORD,FNAME,LNAME,UTYPE) VALUES('"
 		+faculty.getUsername()+"', 'PASSWORD', '"+faculty.getFirstName()+"', '"+faculty.getLastName()+"', '"+FeedbackConsts.ROLE_FACULTY+"');";
 		
+		int resp = 0;
 		long facultyId = connector.createNew(query);
 		query = "";
 		for(SemesterSubject ss : faculty.getSemesterSubjects()) {
-			query += "insert into "+FeedbackConsts.SCHEMA+".SEMESTER_SUBJECT_FACULTY(SEMESTER_ID, SUBJECT_ID, FACULTY_ID) VALUES("
+			query = "insert into "+FeedbackConsts.SCHEMA+".SEMESTER_SUBJECT_FACULTY(SEMESTER_ID, SUBJECT_ID, FACULTY_ID) VALUES("
 					+ ss.getSemesterId() + ", "
 					+ ss.getSubjectId() + ", "						
 					+ facultyId					
 					+ ");";
-		}			
-		int resp = connector.executeUpdate(query);
+			resp += connector.executeUpdate(query);
+		}
 		connector.commit();
 		return resp;
 	}
