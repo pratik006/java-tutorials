@@ -146,6 +146,7 @@ public class FeedbackHandler {
 			}
 		}
 		catch(SQLException ex) {
+			ex.printStackTrace();
 			connector.rollback();
 			throw ex;
 		}		
