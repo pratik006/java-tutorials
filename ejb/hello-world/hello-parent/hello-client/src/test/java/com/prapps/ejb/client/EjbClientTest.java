@@ -23,6 +23,7 @@ public class EjbClientTest {
 		HelloRequest helloRequest = new HelloRequest();
 		helloRequest.setId(501l);
 		helloRequest.setKey("barsha");
+		bean = doLookup();
 		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
     }
     
@@ -45,7 +46,6 @@ public class EjbClientTest {
 			Context ctx = new InitialContext(jndiProps);
 			Object obj = ctx.lookup(lookupName);
 			bean = (HelloWorldBeanRemote) obj;
-			System.out.println(bean);
 			//context.close();
 		} catch (NamingException e) {
 			e.printStackTrace();

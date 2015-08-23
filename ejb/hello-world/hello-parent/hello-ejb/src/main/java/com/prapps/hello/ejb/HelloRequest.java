@@ -1,7 +1,10 @@
 package com.prapps.hello.ejb;
 
-public class HelloRequest {
+import java.io.Serializable;
 
+public class HelloRequest implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String key;
 	public Long getId() {

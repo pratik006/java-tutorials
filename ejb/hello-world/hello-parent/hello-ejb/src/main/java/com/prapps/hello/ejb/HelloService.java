@@ -15,12 +15,12 @@ import javax.jws.soap.SOAPBinding;
 @WebService(name="Hello", serviceName="HelloService")
 @SOAPBinding(parameterStyle=SOAPBinding.ParameterStyle.BARE)
 @Interceptors(TimerLog.class)
-public class HelloWorld implements HelloWorldBeanRemote {
+public class HelloService implements HelloWorldBeanRemote {
 
     /**
      * Default constructor. 
      */
-    public HelloWorld() {
+    public HelloService() {
         // TODO Auto-generated constructor stub
     }
 
