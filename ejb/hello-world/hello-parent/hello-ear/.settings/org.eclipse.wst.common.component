@@ -2,7 +2,7 @@
     <wb-module deploy-name="hello">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="hello.war" deploy-path="/" handle="module:/resource/hello-war/hello-war">
+        <dependent-module archiveName="hello.war" deploy-path="/" handle="module:/classpath/var/M2_REPO/com/prapps/hello-war/0.0.1-SNAPSHOT/hello-war-0.0.1-SNAPSHOT.war">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="hello-ejb.jar" deploy-path="/" handle="module:/resource/hello-ejb/hello-ejb">
