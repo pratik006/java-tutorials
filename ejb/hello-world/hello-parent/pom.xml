@@ -30,13 +30,14 @@
 				<plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
 					<artifactId>jaxws-maven-plugin</artifactId>
-					
+					<version>2.3</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -50,9 +51,6 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<!-- To use the plugin goals in your POM or parent POM -->
-			<!-- <plugin> <groupId>org.jvnet.jax-ws-commons</groupId> <artifactId>jaxws-maven-plugin</artifactId> 
-				<version>2.3</version> </plugin> -->
 		</plugins>
 		<finalName>hello</finalName>
 	</build>
@@ -65,4 +63,14 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>xalan</groupId>
+				<artifactId>xalan</artifactId>
+				<version>2.7.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
