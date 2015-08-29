@@ -22,7 +22,7 @@ public class HelloWebServiceClientTest
     	System.out.println(service.getHelloPort().sayHelloRemote());
     	Holder<Long> holder = new Holder<Long>(123l);
     	Holder<String> holder2 = new Holder<String>();
-    	service.getHelloPort().sayHelloRemoteDetail(holder, "barsha", holder2);
+    	service.getHelloPort().sayHelloRemoteDetail(holder, "World", holder2);
     	System.out.println(holder2.value);
     }
 }

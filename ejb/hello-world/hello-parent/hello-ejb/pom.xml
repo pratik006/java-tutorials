@@ -43,9 +43,9 @@
 							<sourceDestDir>src/main/java</sourceDestDir>
 							<packageName>com.prapps.hello.ejb.stub</packageName>
 							<executable>${tool.wsimport}</executable>
-							<wsdlUrls>
-								<wsdlUrl>http://localhost:8080/hello/HelloService/Hello?wsdl</wsdlUrl>
-							</wsdlUrls>
+							<wsdlFiles>
+								<wsdlFile>${project.basedir}/src/main/resources/wsdls/hello.wsdl</wsdlFile>
+							</wsdlFiles>
 						</configuration>
 					</execution>
 				</executions>
@@ -60,7 +60,7 @@
 			<artifactId>jboss-javaee-6.0</artifactId>
 			<version>${version.org.jboss.spec.jboss.javaee.6.0}</version>
 			<type>pom</type>
-			<scope>import</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.spec.javax.annotation</groupId>

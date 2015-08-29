@@ -1,10 +1,8 @@
 package com.prapps.ejb.client;
 
 import java.net.MalformedURLException;
-import java.util.Properties;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.prapps.hello.ejb.HelloRequest;
@@ -22,28 +20,26 @@ public class EjbClientTest {
 		System.out.println("Response from EJB: "+bean.sayHelloRemote());
 		HelloRequest helloRequest = new HelloRequest();
 		helloRequest.setId(501l);
-		helloRequest.setKey("barsha");
-		bean = doLookup();
+		helloRequest.setKey("World");
+		//bean = doLookup();
 		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
     }
     
     private static HelloWorldBeanRemote doLookup() {
 		HelloWorldBeanRemote bean = null;
 		try {
-			//context = ClientUtility.getInitialContext();
+			Context ctx = ClientUtility.getInitialContext();			
 			String lookupName = getLookupName();
 			
-			Properties jndiProps = new Properties();
+			/*Properties jndiProps = new Properties();
 			jndiProps.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
 			jndiProps.put(Context.PROVIDER_URL,"remote://localhost:4447");
-			// username
 			jndiProps.put(Context.SECURITY_PRINCIPAL, "appuser");
-			// password
 			jndiProps.put(Context.SECURITY_CREDENTIALS, "password123");
 			// This is an important property to set if you want to do EJB invocations via the remote-naming project
 			jndiProps.put("jboss.naming.client.ejb.context", true);
 			// create a context passing these properties
-			Context ctx = new InitialContext(jndiProps);
+			Context ctx = new InitialContext(jndiProps);*/
 			Object obj = ctx.lookup(lookupName);
 			bean = (HelloWorldBeanRemote) obj;
 			//context.close();
@@ -65,7 +61,7 @@ public class EjbClientTest {
 		 * The module name is the JAR name of the deployed EJB without the .jar
 		 * suffix.
 		 */
-		String moduleName = "hello";
+		String moduleName = "hello-ejb";
 
 		/*
 		 * AS7 allows each deployment to have an (optional) distinct name. This
@@ -80,7 +76,9 @@ public class EjbClientTest {
 		final String interfaceName = HelloWorldBeanRemote.class.getName();
 
 		// Create a look up string name
-		String name = "ejb:" + appName + "/" + moduleName + "/" + distinctName
+		/*String name = "ejb:" + appName + "/" + moduleName + "/" + distinctName
+				+ "/" + beanName + "!" + interfaceName;*/
+		String name = appName + "/" + moduleName + "/" + distinctName
 				+ "/" + beanName + "!" + interfaceName;
 
 		return name;
