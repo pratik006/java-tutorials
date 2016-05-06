@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.prapps</groupId>
 			<artifactId>hello-ejb</artifactId>
-			<version>${hello.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

@@ -13,11 +13,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<hello.version>0.0.1-SNAPSHOT</hello.version>
+		<project.version>0.0.1-SNAPSHOT</project.version>
 		<jboss.version>7.1.1.Final</jboss.version>
+		<jboss.jaxws.tools.version>1.1.2.Final</jboss.jaxws.tools.version>
 	</properties>
 
 	<modules>
+		<module>hello-webservice</module>
 		<module>hello-ejb</module>
 		<module>hello-war</module>
 		<module>hello-ear</module>
@@ -25,7 +27,7 @@
 	</modules>
 
 	<build>
-		<pluginManagement>
+		<!-- <pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
@@ -33,7 +35,7 @@
 					<version>2.3</version>
 				</plugin>
 			</plugins>
-		</pluginManagement>
+		</pluginManagement> -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -71,6 +73,43 @@
 				<artifactId>xalan</artifactId>
 				<version>2.7.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.ws.plugins</groupId>
+				<artifactId>maven-jaxws-tools-plugin</artifactId>
+				<version>${jboss.jaxws.tools.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+ 
+	<repositories>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public 
+        Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<!--<repository>
+			<id>jboss-deprecated</id>
+			<name>JBoss Deprecated</name>
+			<url>https://repository.jboss.org/nexus/content/repositories/deprecated/
+        </url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository> -->
+	</repositories>
 </project>
