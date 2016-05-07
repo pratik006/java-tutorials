@@ -20,7 +20,7 @@ public class EjbClientTest {
 		System.out.println("Response from EJB: "+bean.sayHelloRemote());
 		HelloRequest helloRequest = new HelloRequest();
 		helloRequest.setId(501l);
-		helloRequest.setKey("World");
+		helloRequest.setKey("Worlda");
 		//bean = doLookup();
 		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
     }
@@ -31,15 +31,6 @@ public class EjbClientTest {
 			Context ctx = ClientUtility.getInitialContext();			
 			String lookupName = getLookupName();
 			
-			/*Properties jndiProps = new Properties();
-			jndiProps.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-			jndiProps.put(Context.PROVIDER_URL,"remote://localhost:4447");
-			jndiProps.put(Context.SECURITY_PRINCIPAL, "appuser");
-			jndiProps.put(Context.SECURITY_CREDENTIALS, "password123");
-			// This is an important property to set if you want to do EJB invocations via the remote-naming project
-			jndiProps.put("jboss.naming.client.ejb.context", true);
-			// create a context passing these properties
-			Context ctx = new InitialContext(jndiProps);*/
 			Object obj = ctx.lookup(lookupName);
 			bean = (HelloWorldBeanRemote) obj;
 			//context.close();

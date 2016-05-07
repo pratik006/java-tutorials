@@ -41,19 +41,19 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ejb-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<!-- this is false by default -->
+					this is false by default
 					<generateClient>true</generateClient>
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 
 	<!-- Define the versions of your ear components here -->
 	<dependencies>

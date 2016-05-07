@@ -2,9 +2,9 @@ package com.prapps.ejb.client;
 
 import java.net.MalformedURLException;
 
-import javax.xml.ws.Holder;
-
-import com.prapps.hello.ejb.stub.HelloService;
+import com.prapps.generated.HelloRequest;
+import com.prapps.generated.HelloResponse;
+import com.prapps.generated.HelloService;
 
 /**
  * Hello world!
@@ -19,10 +19,12 @@ public class HelloWebServiceClientTest
     
     private static void testWebService() throws MalformedURLException {
     	HelloService service = new HelloService();
-    	System.out.println(service.getHelloPort().sayHelloRemote());
-    	Holder<Long> holder = new Holder<Long>(123l);
-    	Holder<String> holder2 = new Holder<String>();
-    	service.getHelloPort().sayHelloRemoteDetail(holder, "World", holder2);
-    	System.out.println(holder2.value);
+    	System.out.println(service.getHelloPort().sayHello());
+    	HelloRequest request = new HelloRequest();
+    	request.setId(1L);
+    	request.setKey("test");
+    	
+    	HelloResponse response = service.getHelloPort().sayHelloDetail(request);
+    	System.out.println(response.getResp());
     }
 }

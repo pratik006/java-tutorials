@@ -48,6 +48,9 @@ public class HelloService implements HelloWorldBeanRemote, Hello {
 
 	@Override
 	public com.prapps.generated.HelloResponse sayHelloDetail(com.prapps.generated.HelloRequest sayHelloDetail) {
-		return sayHelloDetail(sayHelloDetail);
+		com.prapps.generated.HelloResponse helloResponse = new com.prapps.generated.HelloResponse();
+		helloResponse.setId(sayHelloDetail.getId()+100);
+		helloResponse.setResp("hello "+sayHelloDetail.getKey());
+		return helloResponse;
 	}
 }
