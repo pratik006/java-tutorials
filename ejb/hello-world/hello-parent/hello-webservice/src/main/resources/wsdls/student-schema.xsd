@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://ejb.hello.prapps.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://ejb.hello.prapps.com/">
+
+	<xs:complexType name="StudentSearchRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="id" type="xs:long" />
+			<xs:element minOccurs="0" name="firstName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="StudentSearchResponse">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="students" type="Student" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<xs:complexType name="Student">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="id" type="xs:long" />
+			<xs:element minOccurs="0" name="firstName" type="xs:string" />
+			<xs:element minOccurs="0" name="lastName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	
+</xsd:schema>

@@ -10,19 +10,27 @@ import com.prapps.hello.ejb.HelloService;
 import com.prapps.hello.ejb.HelloWorldBeanRemote;
 
 public class EjbClientTest {
+	
     public static void main( String[] args ) throws MalformedURLException
     {
     	testEJB();
     }
     
     private static void testEJB() {
-    	HelloWorldBeanRemote bean = doLookup();
-		System.out.println("Response from EJB: "+bean.sayHelloRemote());
-		HelloRequest helloRequest = new HelloRequest();
-		helloRequest.setId(501l);
-		helloRequest.setKey("Worlda");
-		//bean = doLookup();
-		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
+    	int ctr = 1000;
+    	while(ctr > 0) {
+    		HelloWorldBeanRemote bean = doLookup();
+    		System.out.println("Response from EJB: "+bean.sayHelloRemote());
+    		HelloRequest helloRequest = new HelloRequest();
+    		helloRequest.setId(501l);
+    		helloRequest.setKey("World");
+    		//bean = doLookup();
+    		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
+    		System.out.println(bean.searchStudents().get(0).getFirstName());
+    		
+    		ctr--;
+    	}
+    	
     }
     
     private static HelloWorldBeanRemote doLookup() {
@@ -33,7 +41,7 @@ public class EjbClientTest {
 			
 			Object obj = ctx.lookup(lookupName);
 			bean = (HelloWorldBeanRemote) obj;
-			//context.close();
+			//ctx.close();
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

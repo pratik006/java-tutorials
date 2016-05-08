@@ -2,7 +2,10 @@
 <wsdl:definitions name="HelloService" targetNamespace="http://ejb.hello.prapps.com/"
 	xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:tns="http://ejb.hello.prapps.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	xmlns:s="http://prapps.com/schemas/services/student" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:import namespace="http://ejb.hello.prapps.com/"
+		location="./student-schema.xsd" />
+
 	<wsdl:types>
 		<xs:schema attributeFormDefault="unqualified"
 			elementFormDefault="unqualified" targetNamespace="http://ejb.hello.prapps.com/"
@@ -19,19 +22,24 @@
 					<xs:element minOccurs="0" name="resp" type="xs:string" />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:element name="sayHelloDetail" nillable="true"
-				type="helloRequest" />
+			<xs:element name="sayHelloDetail" nillable="true" type="helloRequest" />
 			<xs:element name="sayHelloDetailResponse" nillable="true"
 				type="helloResponse" />
-			<xs:element name="sayHelloResponse" nillable="true"
-				type="xs:string" />
+			<xs:element name="sayHelloResponse" nillable="true" type="xs:string" />
 		</xs:schema>
 	</wsdl:types>
+
 	<wsdl:message name="sayHelloDetail">
 		<wsdl:part element="tns:sayHelloDetail" name="sayHelloDetail">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="sayHello">
+	</wsdl:message>
+	<wsdl:message name="StudentSearchRequest">
+		<wsdl:part name="StudentSearchRequest" type="tns:StudentSearchRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="StudentSearchResponse">
+		<wsdl:part name="StudentSearchResponse" type="tns:StudentSearchResponse"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="sayHelloResponse">
 		<wsdl:part element="tns:sayHelloResponse" name="sayHelloResponse">
@@ -41,12 +49,12 @@
 		<wsdl:part element="tns:sayHelloDetailResponse" name="sayHelloDetailResponse">
 		</wsdl:part>
 	</wsdl:message>
+
 	<wsdl:portType name="Hello">
 		<wsdl:operation name="sayHelloDetail">
 			<wsdl:input message="tns:sayHelloDetail" name="sayHelloDetail">
 			</wsdl:input>
-			<wsdl:output message="tns:sayHelloDetailResponse"
-				name="sayHelloDetailResponse">
+			<wsdl:output message="tns:sayHelloDetailResponse" name="sayHelloDetailResponse">
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="sayHello">
@@ -55,7 +63,14 @@
 			<wsdl:output message="tns:sayHelloResponse" name="sayHelloResponse">
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="GetStudents">
+			<wsdl:input message="tns:StudentSearchRequest" name="StudentSearchRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:StudentSearchResponse" name="StudentSearchResponse">
+			</wsdl:output>
+		</wsdl:operation>
 	</wsdl:portType>
+
 	<wsdl:binding name="HelloServiceSoapBinding" type="tns:Hello">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
@@ -74,6 +89,15 @@
 				<soap:body use="literal" />
 			</wsdl:input>
 			<wsdl:output name="sayHelloResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetStudents">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="StudentSearchRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="StudentSearchResponse">
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>

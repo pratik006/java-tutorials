@@ -14,8 +14,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.version>0.0.1-SNAPSHOT</project.version>
+		<version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+		<version.org.jboss.spec.jboss.javaee.6.0>3.0.0.Final</version.org.jboss.spec.jboss.javaee.6.0>
+		<jboss.bom.version>1.0.7.Final</jboss.bom.version>
 		<jboss.version>7.1.1.Final</jboss.version>
 		<jboss.jaxws.tools.version>1.1.2.Final</jboss.jaxws.tools.version>
+		<h2.version>1.4.191</h2.version>
 	</properties>
 
 	<modules>
@@ -23,19 +27,15 @@
 		<module>hello-ejb</module>
 		<module>hello-war</module>
 		<module>hello-ear</module>
+		<module>persistence</module>
+		<module>student-api</module>
 		<!-- <module>hello-client</module> -->
 	</modules>
 
 	<build>
-		<!-- <pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.jvnet.jax-ws-commons</groupId>
-					<artifactId>jaxws-maven-plugin</artifactId>
-					<version>2.3</version>
-				</plugin>
-			</plugins>
-		</pluginManagement> -->
+		<!-- <pluginManagement> <plugins> <plugin> <groupId>org.jvnet.jax-ws-commons</groupId> 
+			<artifactId>jaxws-maven-plugin</artifactId> <version>2.3</version> </plugin> 
+			</plugins> </pluginManagement> -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -78,14 +78,55 @@
 				<artifactId>maven-jaxws-tools-plugin</artifactId>
 				<version>${jboss.jaxws.tools.version}</version>
 			</dependency>
+			<!-- Define the version of JBoss' Java EE 6 APIs we want to import. Any 
+				dependencies from org.jboss.spec will have their version defined by this 
+				BOM -->
+			<!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill 
+				of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection) 
+				of artifacts. We use this here so that we always get the correct versions 
+				of artifacts. Here we use the jboss-javaee-6.0 stack (you can read this as 
+				the JBoss stack of the Java EE 6 APIs). You can actually use this stack with 
+				any version of JBoss AS that implements Java EE 6, not just JBoss AS 7! -->
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>${version.org.jboss.spec.jboss.javaee.6.0}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+				<artifactId>jboss-javaee-6.0-with-transactions</artifactId>
+				<version>${jboss.bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+				<version>1.0.7.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>1</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
- 
+
 	<repositories>
 		<repository>
 			<id>jboss-public-repository-group</id>
 			<name>JBoss Public 
-        Repository Group</name>
+			Repository Group</name>
 			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 			<layout>default</layout>
 			<releases>
@@ -97,19 +138,9 @@
 				<updatePolicy>never</updatePolicy>
 			</snapshots>
 		</repository>
-		<!--<repository>
-			<id>jboss-deprecated</id>
-			<name>JBoss Deprecated</name>
-			<url>https://repository.jboss.org/nexus/content/repositories/deprecated/
-        </url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository> -->
+		<!-- <repository> <id>jboss-deprecated</id> <name>JBoss Deprecated</name> 
+			<url>https://repository.jboss.org/nexus/content/repositories/deprecated/ 
+			</url> <layout>default</layout> <releases> <enabled>true</enabled> <updatePolicy>never</updatePolicy> 
+			</releases> <snapshots> <enabled>false</enabled> </snapshots> </repository> -->
 	</repositories>
 </project>

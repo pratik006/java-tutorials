@@ -71,5 +71,12 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>com.prapps</groupId>
+			<artifactId>hello-persistence</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		
 	</dependencies>
 </project>
