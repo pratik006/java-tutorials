@@ -1,15 +1,19 @@
 package com.prapps.ejb.client;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import com.prapps.hello.ejb.HelloRequest;
-import com.prapps.hello.ejb.HelloService;
-import com.prapps.hello.ejb.HelloWorldBeanRemote;
+import org.apache.log4j.Logger;
+
+import com.prapps.student.api.HelloWorldBeanRemote;
+import com.prapps.student.api.Student;
+import com.prapps.student.api.StudentSearchCriteria;
 
 public class EjbClientTest {
+	private static final Logger LOG = Logger.getLogger(EjbClientTest.class);
 	
     public static void main( String[] args ) throws MalformedURLException
     {
@@ -17,16 +21,29 @@ public class EjbClientTest {
     }
     
     private static void testEJB() {
-    	int ctr = 1000;
+    	int ctr = 1;
     	while(ctr > 0) {
     		HelloWorldBeanRemote bean = doLookup();
-    		System.out.println("Response from EJB: "+bean.sayHelloRemote());
-    		HelloRequest helloRequest = new HelloRequest();
-    		helloRequest.setId(501l);
-    		helloRequest.setKey("World");
-    		//bean = doLookup();
-    		System.out.println(bean.sayHelloRemoteDetail(helloRequest).getResp());
-    		System.out.println(bean.searchStudents().get(0).getFirstName());
+    		StudentSearchCriteria request = new StudentSearchCriteria();
+    		List<Student> students = bean.searchStudents(request);
+    		LOG.trace("Response from EJB: "+students);
+    		for (Student student : students) {
+    			LOG.debug(student.getFirstName()+"\t"+student.getLastName());
+    		}
+    		
+    		Student student = new Student();
+    		student.setId(501l);
+    		student.setFirstName("John");
+    		student.setLastName("Doe");
+    		
+    		bean.registerStudent(student);
+    		
+    		
+    		students = bean.searchStudents(request);
+    		LOG.trace("Response from EJB: "+students);
+    		for (Student std : students) {
+    			LOG.debug(std.getFirstName()+"\t"+std.getLastName());
+    		}
     		
     		ctr--;
     	}
@@ -69,7 +86,7 @@ public class EjbClientTest {
 		String distinctName = "";
 
 		// The EJB bean implementation class name
-		String beanName = HelloService.class.getSimpleName();
+		String beanName = "HelloService";
 
 		// Fully qualified remote interface name
 		final String interfaceName = HelloWorldBeanRemote.class.getName();

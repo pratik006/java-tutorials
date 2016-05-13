@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://student.prapps.com/" targetNamespace="http://student.prapps.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+
+	<xs:element name="StudentSearchRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" name="id" type="xs:long" />
+				<xs:element minOccurs="0" name="firstName" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="StudentSearchResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" maxOccurs="unbounded" name="students" type="StudentDetail" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="StudentRegnRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" name="student" type="StudentDetail" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="StudentRegnResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" name="result" type="xs:boolean" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<xs:complexType name="StudentDetail">
+		<xs:sequence>
+			<xs:element minOccurs="0" name="id" type="xs:long" />
+			<xs:element minOccurs="0" name="firstName" type="xs:string" />
+			<xs:element minOccurs="0" name="lastName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

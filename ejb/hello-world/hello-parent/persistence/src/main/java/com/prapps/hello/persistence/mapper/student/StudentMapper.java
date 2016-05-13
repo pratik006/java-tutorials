@@ -24,4 +24,12 @@ public class StudentMapper {
 		}
 		return students;
 	}
+	
+	public StudentEntity mapStudent(Student student) {
+		StudentEntity entity = new StudentEntity();
+		entity.setId(student.getId());
+		entity.setFirstName(student.getFirstName());
+		entity.setLastName(student.getLastName());
+		return entity;
+	}
 }

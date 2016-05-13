@@ -6,17 +6,24 @@
 		java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 	<persistence-unit name="hibernateUnit" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<non-jta-data-source>java:jboss/datasources/ExampleDS</non-jta-data-source>
 		<class>com.prapps.hello.persistence.entity.StudentEntity</class>
         <properties>
-           <property name="hibernate.connection.url" value="jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE;INIT=runscript from 'classpath:META-INF/scripts/init.sql';" />
+           <!-- <property name="hibernate.connection.url" value="jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE;INIT=runscript from 'classpath:META-INF/scripts/init.sql';" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"></property>
-            <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-            <property name="hibernate.connection.password" value="root" />
-            <property name="hibernate.connection.username" value="root" />
+            <property name="hibernate.connection.driver_class" value="org.h2.Driver" /> 
+            <property name="hibernate.connection.password" value="sa" />
+            <property name="hibernate.connection.username" value="sa" /> -->
+            
+            <!-- <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="root" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" /> -->
             
             
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/script/init.ddl" />
-           <!--  <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+            <property name="hibernate.show_sql" value="true" />
+           <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             
         </properties>
 	</persistence-unit>

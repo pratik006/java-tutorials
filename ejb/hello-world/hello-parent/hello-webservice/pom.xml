@@ -10,7 +10,6 @@
 	</parent>
 	<artifactId>hello-webservice</artifactId>
 	<name>hello-webservice</name>
-	<url>http://maven.apache.org</url>
 
 
 	<build>
@@ -25,9 +24,9 @@
 						</goals>
 						<configuration>
 							<wsdls>
-								<wsdl>${project.basedir}/src/main/resources/wsdls/hello.wsdl</wsdl>
+								<wsdl>${project.basedir}/src/main/resources/META-INF/wsdls/student/student.wsdl</wsdl>
 							</wsdls>
-							<targetPackage>com.prapps.generated</targetPackage>
+							<targetPackage>com.prapps.student.generated</targetPackage>
 						</configuration>
 					</execution>
 				</executions>

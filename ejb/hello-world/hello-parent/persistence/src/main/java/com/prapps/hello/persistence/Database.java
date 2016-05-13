@@ -10,7 +10,7 @@ public class Database {
 	private @PersistenceContext(unitName="hibernateUnit") EntityManager factory;
 	
 	public Session getSession() {
-		return factory.unwrap(Session.class);
+		return (Session) factory.getDelegate();
 	}
  
 }

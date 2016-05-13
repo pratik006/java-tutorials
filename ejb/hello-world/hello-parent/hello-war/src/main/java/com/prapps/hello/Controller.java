@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.prapps.hello.ejb.HelloWorldBeanRemote;
+import com.prapps.student.api.HelloWorldBeanRemote;
 
 /**
  * Servlet implementation class Controller
@@ -36,9 +36,8 @@ public class Controller extends HttpServlet {
 		System.out.println("action: "+action);
 		if("remote".equals(action)) {
 			try {
-				resp.getOutputStream().write(helloWorldBeanRemote.sayHelloRemote().getBytes());
+				resp.getOutputStream().write(helloWorldBeanRemote.searchStudents(null).get(0).getFirstName().getBytes());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
