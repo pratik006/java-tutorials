@@ -13,7 +13,6 @@ import com.prapps.student.StudentRegnRequest;
 import com.prapps.student.StudentRegnResponse;
 import com.prapps.student.StudentSearchRequest;
 import com.prapps.student.StudentSearchResponse;
-import com.prapps.student.api.Student;
 
 import junit.framework.Assert;
 

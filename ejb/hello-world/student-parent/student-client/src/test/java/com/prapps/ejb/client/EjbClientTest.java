@@ -2,7 +2,6 @@ package com.prapps.ejb.client;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -34,7 +33,7 @@ public class EjbClientTest {
 		if (ctx == null) {
             Properties properties = new Properties();
             try {
-				properties.load(new FileInputStream("src/main/resources/jboss-ejb-client.properties"));
+				properties.load(new FileInputStream("src/test/resources/jboss-ejb-client.properties"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
