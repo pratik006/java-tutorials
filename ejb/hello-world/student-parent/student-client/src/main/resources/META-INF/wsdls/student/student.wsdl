@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="StudentServices" 
+	xmlns="http://student.prapps.com/"
+	targetNamespace="http://student.prapps.com/" 
+	xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:tns="http://student.prapps.com/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema targetNamespace="http://student.prapps.com/Imports/">
+			<xs:import namespace="http://student.prapps.com/" schemaLocation="student-schema.xsd" />
+		</xs:schema>
+	</wsdl:types>
+
+	<wsdl:message name="StudentSearchRequestMsg">
+		<wsdl:part name="StudentSearchRequest" element="tns:StudentSearchRequest" />
+	</wsdl:message>
+	<wsdl:message name="StudentSearchResponseMsg">
+		<wsdl:part name="StudentSearchResponse" element="StudentSearchResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="StudentRegnRequestMsg">
+		<wsdl:part name="StudentRegnRequest" element="StudentRegnRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="StudentRegnResponseMsg">
+		<wsdl:part name="StudentRegnResponse" element="StudentRegnResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="IStudentService">
+		<wsdl:operation name="SearchStudents">
+			<wsdl:input name="StudentSearchRequest" message="tns:StudentSearchRequestMsg" />
+			<wsdl:output name="StudentSearchResponse" message="tns:StudentSearchResponseMsg" />
+		</wsdl:operation>
+
+		<wsdl:operation name="RegisterStudent">
+			<wsdl:input name="StudentRegnRequest" message="tns:StudentRegnRequestMsg" />
+			<wsdl:output name="StudentRegnResponse" message="tns:StudentRegnResponseMsg" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="StudentServiceSoapBinding" type="IStudentService"> 
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" 
+		/> <wsdl:operation name="SearchStudents"> <soap:operation soapAction="" style="document" 
+		/> <wsdl:input name="StudentSearchRequest"> <soap:body use="literal" /> </wsdl:input> 
+		<wsdl:output name="StudentSearchResponse"> <soap:body use="literal" /> </wsdl:output> 
+		</wsdl:operation> <wsdl:operation name="RegisterStudent"> <soap:operation 
+		soapAction="" style="document" /> <wsdl:input name="StudentRegnRequest"> 
+		<soap:body use="literal" /> </wsdl:input> <wsdl:output name="StudentRegnResponse"> 
+		<soap:body use="literal" /> </wsdl:output> </wsdl:operation> </wsdl:binding> 
+		<wsdl:service name="IStudentService"> <wsdl:port binding="tns:StudentServiceSoapBinding" 
+		name="StudentPort"> <soap:address location="http://localhost:8080/student-ejb/IStudentService/IStudentService" 
+		/> </wsdl:port> </wsdl:service>
+</wsdl:definitions>
