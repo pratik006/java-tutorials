@@ -35,7 +35,7 @@ public class EmbeddedDatabaseConfig extends Neo4jConfiguration{
 	@Bean
 	public GraphDatabaseService getLocalConnection() {
 		GraphDatabaseService graphDB = new GraphDatabaseFactory().newEmbeddedDatabase( new File("target/db1") );
-		//registerShutdownHook(graphDB);
+		registerShutdownHook(graphDB);
 		return graphDB;
 	}
 
