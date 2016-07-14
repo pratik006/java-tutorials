@@ -5,15 +5,12 @@
 	<artifactId>spring-neo4j</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<!-- tag::dependencies[] -->
 	<properties>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<start-class>movies.spring.data.neo4j.SampleMovieApplication</start-class>
 		<neo4j.version>3.0.1</neo4j.version>
 		<spring-data-neo4j.version>4.1.1.RELEASE</spring-data-neo4j.version>
-		<spring-data-releasetrain.version>Hopper-SR1</spring-data-releasetrain.version>
 	</properties>
 
 	<parent>
@@ -24,25 +21,6 @@
 	</parent>
 
 	<dependencies>
-
-		<!-- uncomment this dependency to use the embedded driver -->
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-ogm-embedded-driver</artifactId>
-			<version>2.0.3</version>
-		</dependency>
-		
-		<dependency>
-            <groupId>org.neo4j.app</groupId>
-            <artifactId>neo4j-server</artifactId>
-            <version>${neo4j.version}</version>
-            <type>test-jar</type>
-       </dependency>
-
-
-
-
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -69,13 +47,11 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-			<version>1.12.0.BUILD-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
 		</dependency>
 
 		<!-- test scoped beans only -->

@@ -1,5 +1,7 @@
 package com.prapps.tutorial.spring.neo4j.controller;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +19,21 @@ public class RailwayController {
 	
 	@RequestMapping("/{id}")
 	public @ResponseBody Train findTrain(@PathVariable(value = "id") Long id) {
-		Train train = new Train();
-		train.setId(id);
-		train.setName("abc");
-		train = trainRepository.save(train);
-		System.out.println(train);
 		return trainRepository.findOne(id);
+	}
+	
+	@RequestMapping("/create")
+	public @ResponseBody Train create(@PathParam("id") Long id, @PathParam("name") String name) {
+		Train t = new Train();
+		t.setId(id);
+		t.setName(name);
+		trainRepository.save(t);
+		return trainRepository.findOne(t.getId());
+	}
+	
+	@RequestMapping("/all")
+	public @ResponseBody Iterable<Train> findAll() {
+		return trainRepository.findAll();
 	}
 	
 	@RequestMapping("/hello")
