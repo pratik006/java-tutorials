@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@NodeEntityScan(basePackages = "com.prapps.tutorial.spring.neo4j.persistence")
+//@NodeEntityScan(basePackages = "com.prapps.tutorial.spring.neo4j.persistence")
 public class Application {
 
 	public static void main(String[] args) throws IOException {

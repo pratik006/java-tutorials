@@ -2,11 +2,14 @@ package com.prapps.tutorial.spring.neo4j.persistence;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 @NodeEntity
 public class Train {
 
-	@GraphId private Long id;
+	@GraphId 
+	private Long id;
+	@Property
 	private String name;
 
 	public Long getId() {
