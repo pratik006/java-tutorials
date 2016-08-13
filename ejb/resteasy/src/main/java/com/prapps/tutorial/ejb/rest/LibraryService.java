@@ -3,17 +3,17 @@ package com.prapps.tutorial.ejb.rest;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 @Path("/library")
 public class LibraryService {
 
 	@GET
+	@Produces({"application/json", "application/xml"})
 	public List<Book> hello() {
 		Book book = new Book();
 		book.setAuthor("Devdutt Patnaik");
@@ -24,7 +24,19 @@ public class LibraryService {
 	
 	@GET
 	@Path("/books")
+	@Produces({"application/json", "application/xml"})
 	public List<Book> getBooks() {
+		Book book = new Book();
+		book.setAuthor("Devdutt Patnaik");
+		book.setIsbn("123asd");
+		book.setTitle("My Gita");
+		return Collections.singletonList(book);
+	}
+	
+	@GET
+	@Path("/xml/books/")
+	@Produces({"application/xml"})
+	public List<Book> getBooksXml() {
 		Book book = new Book();
 		book.setAuthor("Devdutt Patnaik");
 		book.setIsbn("123asd");
@@ -34,19 +46,12 @@ public class LibraryService {
 
 	@GET
 	@Path("/book/{isbn}")
-	public String getBook(@PathParam("isbn") String id) {
-		return "testing";
-	}
-
-	@PUT
-	@Path("/book/{isbn}")
-	public void addBook(@PathParam("isbn") String id, @QueryParam("name") String name) {
-
-	}
-
-	@DELETE
-	@Path("/book/{id}")
-	public void removeBook(@PathParam("id") String id) {
-
+	@Produces({"application/json", "application/xml"})
+	public Book getBook(@PathParam("isbn") String id) {
+		Book book = new Book();
+		book.setAuthor("Devdutt Patnaik");
+		book.setIsbn("123asd");
+		book.setTitle("My Gita");
+		return book;
 	}
 }
