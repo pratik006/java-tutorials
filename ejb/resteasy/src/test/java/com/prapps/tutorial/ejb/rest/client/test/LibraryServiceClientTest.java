@@ -15,7 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.prapps.tutorial.ejb.rest.Book;
+import com.prapps.tutorial.ejb.rest.model.Book;
 
 
 

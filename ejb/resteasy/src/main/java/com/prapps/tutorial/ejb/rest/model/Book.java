@@ -1,4 +1,4 @@
-package com.prapps.tutorial.ejb.rest;
+package com.prapps.tutorial.ejb.rest.model;
 
 import java.io.Serializable;
 

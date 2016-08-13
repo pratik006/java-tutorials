@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import com.prapps.tutorial.ejb.rest.service.LibraryService;
+
 @ApplicationPath("/")
 public class ApplicationConfig extends Application {
 	

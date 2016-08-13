@@ -1,4 +1,4 @@
-package com.prapps.tutorial.ejb.rest;
+package com.prapps.tutorial.ejb.rest.service;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import com.prapps.tutorial.ejb.rest.model.Book;
 
 @Path("/library")
 public class LibraryService {
