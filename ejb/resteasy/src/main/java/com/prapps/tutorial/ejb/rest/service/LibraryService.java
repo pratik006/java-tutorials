@@ -7,23 +7,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 
 import com.prapps.tutorial.ejb.rest.model.Book;
 
 @Path("/library")
 public class LibraryService {
 
-	@GET
-	@Produces({"application/json", "application/xml"})
-	public List<Book> hello() {
-		Book book = new Book();
-		book.setAuthor("Devdutt Patnaik");
-		book.setIsbn("123asd");
-		book.setTitle("My Gita");
-		return Collections.singletonList(book);
-	}
-	
 	@GET
 	@Path("/books")
 	@Produces({"application/json", "application/xml"})
@@ -35,17 +24,6 @@ public class LibraryService {
 		return Collections.singletonList(book);
 	}
 	
-	@GET
-	@Path("/xml/books/")
-	@Produces({"application/xml"})
-	public List<Book> getBooksXml() {
-		Book book = new Book();
-		book.setAuthor("Devdutt Patnaik");
-		book.setIsbn("123asd");
-		book.setTitle("My Gita");
-		return Collections.singletonList(book);
-	}
-
 	@GET
 	@Path("/book/{isbn}")
 	@Produces({"application/json", "application/xml"})
