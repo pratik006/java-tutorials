@@ -25,13 +25,24 @@ public class LibraryService {
 	}
 	
 	@GET
-	@Path("/book/{isbn}")
+	@Path("/books/{isbn}")
 	@Produces({"application/json", "application/xml"})
 	public Book getBook(@PathParam("isbn") String id) {
 		Book book = new Book();
 		book.setAuthor("Devdutt Patnaik");
 		book.setIsbn("123asd");
 		book.setTitle("My Gita");
+		return book;
+	}
+	
+	@GET
+	@Path("/books/{author}/{title}")
+	@Produces({"application/json", "application/xml"})
+	public Book getBook(@PathParam("author") String author, @PathParam("title") String title) {
+		Book book = new Book();
+		book.setAuthor(author);
+		book.setIsbn("123asd");
+		book.setTitle(title);
 		return book;
 	}
 }
