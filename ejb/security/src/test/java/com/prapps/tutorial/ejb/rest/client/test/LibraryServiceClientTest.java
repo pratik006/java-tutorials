@@ -87,7 +87,7 @@ public class LibraryServiceClientTest {
 
 		@Override
 		public void filter(ClientRequestContext requestContext) throws IOException {
-			String token = "admin:password";
+			String token = "testuser1:password1";
 			String base64Token = Base64.encodeBytes(token.getBytes(StandardCharsets.UTF_8));
 			requestContext.getHeaders().add("X-Requested-With", "XMLHttpRequest");
 			requestContext.getHeaders().add("Authorization", "Basic " + base64Token);

@@ -1,121 +1,113 @@
 package com.prapps.tutorial.ejb.rest.interceptor;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.security.Principal;
+import java.util.Map;
 
-import javax.annotation.security.DenyAll;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.Provider;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.InvocationContext;
 
-import org.jboss.resteasy.core.Headers;
-import org.jboss.resteasy.core.ResourceMethodInvoker;
-import org.jboss.resteasy.core.ServerResponse;
-import org.jboss.resteasy.util.Base64;
+import org.jboss.logging.Logger;
+/**
+ * The server side security interceptor responsible for handling any security identity propagated from the client.
+ * This interceptor is configured in jboss-ejb3.xml of the application package.
+ * 
+ * @author <a href="mailto:darran.lofthouse@jboss.com">Darran Lofthouse</a>
+ */
+public class SecurityInterceptor {
 
-@Provider
-public class SecurityInterceptor implements ContainerRequestFilter {
+    private static final Logger LOG = Logger.getLogger(SecurityInterceptor.class);
 
-	private static final String AUTHORIZATION_PROPERTY = "Authorization";
-	private static final String AUTHENTICATION_SCHEME = "Basic";
-	private static final ServerResponse ACCESS_DENIED = new ServerResponse(
-			"Access denied for this resource", 401, new Headers<Object>());;
-	private static final ServerResponse ACCESS_FORBIDDEN = new ServerResponse(
-			"Nobody can access this resource", 403, new Headers<Object>());;
-	private static final ServerResponse SERVER_ERROR = new ServerResponse(
-			"INTERNAL SERVER ERROR", 500, new Headers<Object>());;
+    static final String DELEGATED_USER_KEY = "TestDelegationUser";
 
-	public void filter(ContainerRequestContext ctx) throws IOException {
-		System.out.println("invoked SecurityInterceptor");
+    @AroundInvoke
+    public Object aroundInvoke(final InvocationContext invocationContext) throws Exception {
+    	LOG.info("invoking SecurityInterceptor->aroundInvoke");
+        Principal desiredUser = null;
+       // RealmUser connectionUser = null;
 
-		ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) ctx
-				.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");
-		Method method = methodInvoker.getMethod();
-		// Access allowed for all
-		if (!method.isAnnotationPresent(PermitAll.class)) {
-			// Access denied for all
-			if (method.isAnnotationPresent(DenyAll.class)) {
-				ctx.abortWith(ACCESS_FORBIDDEN);
-				return;
-			}
+        Map<String, Object> contextData = invocationContext.getContextData();
+        LOG.info(">>>>>>>>>> contextData " + contextData);
+        if (contextData.containsKey(DELEGATED_USER_KEY)) {
+            desiredUser = new SimplePrincipal((String) contextData.get(DELEGATED_USER_KEY));
+            LOG.trace("desiredUser " + desiredUser);
 
-			// Get request headers
-			final MultivaluedMap<String, String> headers = ctx.getHeaders();
+           /* Connection con = SecurityActions.remotingContextGetConnection();
 
-			// Fetch authorization header
-			final List<String> authorization = headers
-					.get(AUTHORIZATION_PROPERTY);
+            if (con != null) {
+                UserInfo userInfo = con.getUserInfo();
+                if (userInfo instanceof SubjectUserInfo) {
+                    SubjectUserInfo sinfo = (SubjectUserInfo) userInfo;
+                    for (Principal current : sinfo.getPrincipals()) {
+                        if (current instanceof RealmUser) {
+                            connectionUser = (RealmUser) current;
+                            break;
+                        }
+                    }
+                }
 
-			// If no authorization information present; block access
-			if (authorization == null || authorization.isEmpty()) {
-				ctx.abortWith(ACCESS_DENIED);
-				return;
-			}
+            } else {
+                throw new IllegalStateException("Delegation user requested but no user on connection found.");
+            }*/
+        }
 
-			// Get encoded username and password
-			final String encodedUserPassword = authorization.get(0)
-					.replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+       /* SecurityContext cachedSecurityContext = null;
+        boolean contextSet = false;
+        try {
+            if (desiredUser != null && connectionUser != null
+                    && (desiredUser.getName().equals(connectionUser.getName()) == false)) {
+                // The final part of this check is to verify that the change does actually indicate a change in user.
+                try {
+                    // We have been requested to switch user and have successfully identified the user from the connection
+                    // so now we attempt the switch.
+                    cachedSecurityContext = SecurityActions.securityContextSetPrincipalInfo(desiredUser,
+                            new OuterUserCredential(connectionUser));
+                    logger.info(">>>>>>>>>>>>> Switch users ");
+                    // keep track that we switched the security context
+                    contextSet = true;
+                    SecurityActions.remotingContextClear();
+                } catch (Exception e) {
+                    logger.error("Failed to switch security context for user", e);
+                    // Don't propagate the exception stacktrace back to the client for security reasons
+                    throw new EJBAccessException("Unable to attempt switching of user.");
+                }
+            }
 
-			// Decode username and password
-			String usernameAndPassword = null;
-			try {
-				usernameAndPassword = new String(
-						Base64.decode(encodedUserPassword));
-			} catch (IOException e) {
-				ctx.abortWith(SERVER_ERROR);
-				return;
-			}
+        } finally {
+            if (contextSet) {
+                SecurityActions.securityContextSet(cachedSecurityContext);
+            }
+        }*/
+        return invocationContext.proceed();
+    }
 
-			// Split username and password tokens
-			final StringTokenizer tokenizer = new StringTokenizer(
-					usernameAndPassword, ":");
-			final String username = tokenizer.nextToken();
-			final String password = tokenizer.nextToken();
+    private static class SimplePrincipal implements Principal {
 
-			// Verifying Username and password
-			System.out.println(username);
-			System.out.println(password);
+        private final String name;
 
-			// Verify user access
-			if (method.isAnnotationPresent(RolesAllowed.class)) {
-				RolesAllowed rolesAnnotation = method
-						.getAnnotation(RolesAllowed.class);
-				Set<String> rolesSet = new HashSet<String>(
-						Arrays.asList(rolesAnnotation.value()));
+        private SimplePrincipal(final String name) {
+            if (name == null) {
+                throw new IllegalArgumentException("name can not be null.");
+            }
+            this.name = name;
+        }
 
-				// Is user valid?
-				if (!isUserAllowed(username, password, rolesSet)) {
-					ctx.abortWith(ACCESS_DENIED);
-					return;
-				}
-			}
-		}
-	}
+        public String getName() {
+            return name;
+        }
 
-	private boolean isUserAllowed(final String username, final String password,
-			final Set<String> rolesSet) {
-		boolean isAllowed = false;
+        @Override
+        public int hashCode() {
+            return name.hashCode();
+        }
 
-		// Step 1. Fetch password from database and match with password in
-		// argument
-		// If both match then get the defined role for user from database and
-		// continue; else return isAllowed [false]
-		// Access the database and do this part yourself
-		// String userRole = userMgr.getUserRole(username);
-		String userRole = "ADMIN";
+        @Override
+        public boolean equals(Object other) {
+            return other instanceof SimplePrincipal && equals((SimplePrincipal) other);
+        }
 
-		// Step 2. Verify user role
-		if (rolesSet.contains(userRole)) {
-			isAllowed = true;
-		}
-		return isAllowed;
-	}
+        public boolean equals(SimplePrincipal other) {
+            return this == other || other != null && name.equals(other.name);
+        }
+
+    }
 }
