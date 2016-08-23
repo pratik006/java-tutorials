@@ -11,12 +11,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ws.api.annotation.WebContext;
 
 import com.prapps.tutorial.ejb.rest.interceptor.LogInterceptor;
 import com.prapps.tutorial.ejb.rest.interceptor.SecurityInterceptor;
 import com.prapps.tutorial.ejb.rest.model.Book;
 
-@SecurityDomain("sts")
 @Path("/library")
 @Interceptors({LogInterceptor.class, SecurityInterceptor.class})
 public class LibraryService {

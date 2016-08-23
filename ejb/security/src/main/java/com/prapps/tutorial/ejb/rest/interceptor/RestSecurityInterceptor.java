@@ -87,8 +87,7 @@ public class RestSecurityInterceptor implements ContainerRequestFilter {
 			final String password = tokenizer.nextToken();
 
 			// Verifying Username and password
-			System.out.println(username);
-			System.out.println(password);
+			LOG.debug(username+"\t"+password);
 
 			// Verify user access
 			if (method.isAnnotationPresent(RolesAllowed.class)) {
@@ -102,8 +101,7 @@ public class RestSecurityInterceptor implements ContainerRequestFilter {
 					ctx.abortWith(ACCESS_DENIED);
 					return;
 				}
-				ctx.setSecurityContext(new SecurityContext() {
-					
+				/*ctx.setSecurityContext(new SecurityContext() {
 					@Override
 					public boolean isUserInRole(String role) {
 						return true;
@@ -130,6 +128,7 @@ public class RestSecurityInterceptor implements ContainerRequestFilter {
 						return "sts";
 					}
 				});
+				LOG.debug("Security Context is set");*/
 			}
 		}
 	}
