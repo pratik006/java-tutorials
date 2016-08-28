@@ -3,8 +3,27 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee">
 
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>LibraryService</web-resource-name>
+			<description>application security constraints</description>
+			<url-pattern>/library/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+			<role-name>user</role-name>
+		</auth-constraint>
+	</security-constraint>
 	<login-config>
 		<auth-method>BASIC</auth-method>
 	</login-config>
+	<security-role>
+		<role-name>admin</role-name>
+	</security-role>
+	<security-role>
+		<role-name>user</role-name>
+	</security-role>
 </web-app>
 

@@ -1,0 +1,20 @@
+#Generate the a self-signed key for server
+keytool -genkey -alias mydomain -keyalg rsa -keystore my-realm.jks
+
+
+#open JBOSS_HOME/bin/jboss_cli.sh
+connect
+/core-service=management/security-realm=SslRealm:add()
+/core-service=management/security-realm=SslRealm/server-identity=ssl:add(keystore-path=localhost.keystore, keystore-relative-to=jboss.server.config.dir, keystore-password=secret,protocol=TLS)
+/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding=https, security-realm=SslRealm)
+reload
+
+
+#After successful completion an entry in the standalone.xml should have been created
+<security-realm name="SslRealm">
+    <server-identities>
+        <ssl protocol="TLS">
+            <keystore path="prapps.jks" relative-to="jboss.server.config.dir" keystore-password="Testadm!n01"/>
+        </ssl>
+    </server-identities>
+</security-realm>
