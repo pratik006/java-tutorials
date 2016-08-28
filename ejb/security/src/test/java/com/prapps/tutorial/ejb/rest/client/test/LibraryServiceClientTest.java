@@ -26,7 +26,7 @@ public class LibraryServiceClientTest {
 	private static final String url = "http://localhost:8080/restful-webservice/library/books";
 
 	static {
-		System.setProperty("java.util.logging.config.file", "logging.properties");
+		System.setProperty("java.util.logging.config.file", "src/test/resources/logging.properties");
 	}
 
 	@Test
@@ -36,10 +36,12 @@ public class LibraryServiceClientTest {
 		Response response = target.request().get();
 		LOG.fine("Headers" + response.getHeaders());
 		LOG.fine("Status: " + response.getStatus());
-		System.out.println(response.readEntity(String.class));
-		GenericType<List<Book>> bookListType = new GenericType<List<Book>>() {
-		};
+		//System.out.println(response.readEntity(String.class));
+		GenericType<List<Book>> bookListType = new GenericType<List<Book>>() {};
 		List<Book> books = response.readEntity(bookListType);
+		for (Book book : books) {
+			LOG.fine("book: " + book);
+		}
 		Book book = books.get(0);
 		Assert.assertEquals(book.getAuthor(), "Devdutt Patnaik");
 		Assert.assertEquals(book.getIsbn(), "123asd");
@@ -87,8 +89,9 @@ public class LibraryServiceClientTest {
 
 		@Override
 		public void filter(ClientRequestContext requestContext) throws IOException {
-			String token = "testuser1:password1";
+			String token = "testuser:Testadm!n01";
 			String base64Token = Base64.encodeBytes(token.getBytes(StandardCharsets.UTF_8));
+			System.out.println(base64Token);
 			requestContext.getHeaders().add("X-Requested-With", "XMLHttpRequest");
 			requestContext.getHeaders().add("Authorization", "Basic " + base64Token);
 			requestContext.getHeaders().add("Accept", "application/xml");
