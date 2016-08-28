@@ -71,7 +71,7 @@
 			<groupId>org.jboss.ws</groupId>
 			<artifactId>jbossws-api</artifactId>
 			<version>1.0.3.Final</version>
-		</dependency>
+		</dependency> 
 
 
 		<dependency>
@@ -113,6 +113,20 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.12</version>
 		</dependency>
+		<!-- added for security testing can be remvoed -->
+		<!-- <dependency>
+			<groupId>org.picketbox</groupId>
+			<artifactId>picketbox</artifactId>
+			<version>4.9.6.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-ejb3</artifactId>
+			<version>10.1.0.CR1</version>
+			<scope>provided</scope>
+		</dependency> -->
+		<!-- added for security testing can be remvoed -->
 
 
 

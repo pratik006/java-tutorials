@@ -42,4 +42,9 @@ public class Book implements Serializable {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+
+	@Override
+	public String toString() {
+		return "Book [isbn=" + isbn + ", title=" + title + ", author=" + author + "]";
+	}
 }
