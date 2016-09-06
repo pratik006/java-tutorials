@@ -17,7 +17,7 @@ import com.prapps.tutorial.ejb.rest.model.Book;
 
 @Path("/library")
 public class LibraryService {
-	private Log LOG = LogFactory.getLog(LibraryService.class);
+	private static final Log LOG = LogFactory.getLog(LibraryService.class);
 	private static Map<String, Book> store = new HashMap<>();
 	
 	@GET
