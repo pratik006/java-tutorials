@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
 
+import { MdIconRegistry } from '@angular2-material/icon';
+
 import {CoursesComponent} from './components/courses.component'
 
 @Component({
   selector: 'my-app',
-  template: `<h1>My First Angular 2 App</h1>
-  				<courses></courses>`,
-
-  providers: [CoursesComponent]
+  templateUrl: './app/app.component.html',
+  styleUrls: ['./app/app.component.css'],
+  providers: [CoursesComponent, MdIconRegistry],
 })
-export class AppComponent { }
+export class AppComponent {
+	views: Object[] = [
+    {
+      name: "My Account",
+      description: "Edit my account information",
+      icon: "assignment ind"
+    },
+    {
+      name: "Potential dates",
+      description: "Find your soulmate!",
+      icon: "pets"
+    }
+  ];
+}

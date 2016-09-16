@@ -16,6 +16,7 @@ import { MdMenuModule } from '@angular2-material/menu';
 import { MdSidenavModule } from '@angular2-material/sidenav';
 import { MdProgressCircleModule } from '@angular2-material/progress-circle';
 import { MdProgressBarModule } from '@angular2-material/progress-bar';
+import {Http, HttpModule} from '@angular/http';
 //import {OverlayModule} from '@angular2-material/core/overlay/overlay-directives';
 
 import { AppComponent }   from './app.component';
@@ -23,7 +24,7 @@ import { CoursesComponent }   from './components/courses.component';
 
 @NgModule({
   imports:      [ BrowserModule, MdInputModule, MdButtonModule, MdCardModule, MdCheckboxModule, MdRadioModule, MdListModule, MdTabsModule, 
-  MdGridListModule, MdIconModule, MdMenuModule, MdToolbarModule, MdSidenavModule, MdProgressCircleModule, MdProgressBarModule/*, OverlayModule*/ ],
+  MdGridListModule, MdIconModule, MdMenuModule, MdToolbarModule, MdSidenavModule, MdProgressCircleModule, MdProgressBarModule, HttpModule ],
   declarations: [ AppComponent, CoursesComponent ],
   bootstrap:    [ AppComponent ]
 })
