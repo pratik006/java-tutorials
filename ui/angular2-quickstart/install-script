@@ -1,5 +1,5 @@
-npm install --save @angular2-material/core @angular2-material/input @angular2-material/button @angular2-material/card @angular2-material/radio @angular2-material/checkbox @angular2-material/checkbox @angular2-material/input @angular2-material/list @angular2-material/tabs @angular2-material/toolbar @angular2-material/tooltip @angular2-material/icon @angular2-material/grid-list @angular2-material/button-toggle @angular2-material/icon
+npm install --save @angular2-material/core @angular2-material/input @angular2-material/button @angular2-material/card @angular2-material/radio @angular2-material/checkbox @angular2-material/checkbox @angular2-material/input @angular2-material/list @angular2-material/tabs @angular2-material/toolbar @angular2-material/tooltip @angular2-material/icon @angular2-material/grid-list @angular2-material/button-toggle @angular2-material/icon @angular2-material/menu @angular2-material/sidenav
 
 
 
-npm install --save @angular2-material/list
+npm install --save @angular2-material/icon

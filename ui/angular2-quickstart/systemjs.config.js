@@ -23,6 +23,7 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
       '@angular2-material/core': 'npm:@angular2-material/core/core.umd.js',
+      //'@angular2-material/core/overalay': 'npm:@angular2-material/core/overalay/overalay.umd.js',
       '@angular2-material/input': 'npm:@angular2-material/input/input.umd.js',
       '@angular2-material/button': 'npm:@angular2-material/button/button.umd.js',
       '@angular2-material/card': 'npm:@angular2-material/card/card.umd.js',
@@ -35,6 +36,10 @@
       '@angular2-material/toolbar': 'npm:@angular2-material/toolbar/toolbar.umd.js',
       '@angular2-material/tooltip': 'npm:@angular2-material/tooltip/tooltip.umd.js',
       '@angular2-material/icon': 'npm:@angular2-material/icon/icon.umd.js',
+      '@angular2-material/menu': 'npm:@angular2-material/menu/menu.umd.js',
+      '@angular2-material/sidenav': 'npm:@angular2-material/sidenav/sidenav.umd.js',
+      '@angular2-material/progress-circle': 'npm:@angular2-material/progress-circle/progress-circle.umd.js',
+      '@angular2-material/progress-bar': 'npm:@angular2-material/progress-bar/progress-bar.umd.js',
       // other libraries
       'rxjs':                       'npm:rxjs',
       'hammer':                       'npm:hammer',
