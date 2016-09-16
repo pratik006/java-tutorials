@@ -1,18 +1,12 @@
 import {Component} from '@angular/core'
 import {CourseService} from '../services/course.service'
+import { MdButtonModule } from '@angular2-material/button';
+import { MdCardModule } from '@angular2-material/card';
 
 @Component({
 	selector: "courses",
-	template: `
-				<h2>Courses</h2>
-				{{ title }}
-				<ul>
-					<li *ngFor="let course of courses">
-						{{ course }}
-					</li>
-				</ul>
-			`,
-	providers: [CourseService]
+	templateUrl: './app/components/courses.component.html',
+	providers: [CourseService, MdButtonModule]
 })
 export class CoursesComponent {
 	title: string = "The title of courses page";
