@@ -2,6 +2,7 @@ package com.prapps.tutorial.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import javax.ws.rs.core.MediaType;
@@ -18,17 +19,30 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
 import com.prapps.tutorial.rest.dto.Book;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+/*@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)*/
 public class RestClientTest {
 	private static final Logger LOG = Logger.getLogger(RestClientTest.class.getName());
-	private static final String url = "/rest/library/books";
+	private static final String url = "http://localhost:8080/rest/library/books";
 	
-	@Autowired
+	//@Autowired
 	private TestRestTemplate restTemplate;
+	
+	RestTemplate restTemplate2 = new RestTemplate();
+	
+	@Test
+	public void testGetBooks2() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Accept", MediaType.APPLICATION_JSON);
+
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		Book[] books = restTemplate2.getForEntity(url, Book[].class).getBody();
+		System.out.println(books[0].getName());
+	}
 	
 	@Test
 	public void testGetBooks() {
