@@ -108,7 +108,7 @@ public class MainFrame extends JFrame {
 					console.setText(consoleText.toString());
 					progressBar.setValue(taskIndex);
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -118,8 +118,37 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void btnRestartActionPerformed(ActionEvent e) {
-		while (taskIndex < tasks.size()) {
-			consoleText.append(tasks.get(taskIndex++).getCommand()+"\r\n");
+		try {
+			while (taskIndex < tasks.size()) {
+				Task task = tasks.get(taskIndex++);
+				System.out.println(task.getCommand());
+				consoleText.append(task.getCommand()+"\r\n");
+				final Process process = Runtime.getRuntime().exec(task.getCommand());
+				Thread temp = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						byte[] buff = new byte[1024];
+						try {
+							while(process.getInputStream().read(buff) != -1) {
+								consoleText.append(new String(buff));
+								System.out.println("aa");
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				temp.start();
+				while (process.isAlive()) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
