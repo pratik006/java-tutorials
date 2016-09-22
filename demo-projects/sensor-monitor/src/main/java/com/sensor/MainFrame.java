@@ -4,13 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +24,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultCaret;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +41,7 @@ public class MainFrame extends JFrame {
 	
 	private Properties labelConfig;
 	private int taskIndex;
+	private int completedTaskCount = 0;
 	private List<Task> tasks;
 	private StringBuilder consoleText;
 	
@@ -52,7 +58,7 @@ public class MainFrame extends JFrame {
 				task.setCommand(String.valueOf(entry.getValue()));
 				tasks.add(task);
 			}
-			
+			Collections.sort(tasks);
 			labelConfig = new Properties();
 			labelConfig.load(new FileInputStream("src/main/resources/label-config.properties"));
 		} catch (IOException e) {
@@ -98,19 +104,28 @@ public class MainFrame extends JFrame {
 		btnRestart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnRestartActionPerformed(e);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						btnRestartActionPerformed(e);
+					}
+				}).start();
 			}
 		});
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while(true) {
-					console.setText(consoleText.toString());
-					progressBar.setValue(taskIndex);
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					synchronized (consoleText) {
+						console.setText(consoleText.toString());
+						DefaultCaret caret = (DefaultCaret) console.getCaret();
+						caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+						progressBar.setValue(completedTaskCount);
+						try {
+							consoleText.wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -121,17 +136,29 @@ public class MainFrame extends JFrame {
 		try {
 			while (taskIndex < tasks.size()) {
 				Task task = tasks.get(taskIndex++);
-				System.out.println(task.getCommand());
 				consoleText.append(task.getCommand()+"\r\n");
-				final Process process = Runtime.getRuntime().exec(task.getCommand());
+				final Process process;
+				String command = null;				
+				if (task.getCommand().startsWith("file:")) {
+					String path = task.getCommand().split("file:///")[1];
+					command = "cmd.exe /c call " + path;
+					process = Runtime.getRuntime().exec(command);
+				} else {
+					command = "cmd.exe /c "+task.getCommand();
+					process = Runtime.getRuntime().exec(command);
+				}
+				
 				Thread temp = new Thread(new Runnable() {
 					@Override
 					public void run() {
 						byte[] buff = new byte[1024];
+						int readLen = -1;
 						try {
-							while(process.getInputStream().read(buff) != -1) {
-								consoleText.append(new String(buff));
-								System.out.println("aa");
+							while((readLen = process.getInputStream().read(buff)) != -1) {
+								synchronized (consoleText) {
+									consoleText.append(new String(buff, 0, readLen));
+									consoleText.notify();
+								}
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -139,13 +166,17 @@ public class MainFrame extends JFrame {
 					}
 				});
 				temp.start();
-				while (process.isAlive()) {
+				while(process.isAlive()) {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
 				}
+				completedTaskCount++;
+			}
+			synchronized (consoleText) {
+				consoleText.notify();
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

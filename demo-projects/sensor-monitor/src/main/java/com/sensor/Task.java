@@ -1,6 +1,6 @@
 package com.sensor;
 
-public class Task {
+public class Task implements Comparable<Task>{
 	
 	private String id;
 	private String command;
@@ -23,5 +23,9 @@ public class Task {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	@Override
+	public int compareTo(Task other) {
+		return Integer.parseInt(id) - Integer.parseInt(other.getId());
 	}
 }
