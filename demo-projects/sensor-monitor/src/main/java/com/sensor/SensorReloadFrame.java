@@ -26,7 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultCaret;
 
-public class MainFrame extends JFrame {
+public class SensorReloadFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int PARENT_WIDTH = 1000;
@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
 	private List<Task> tasks;
 	private StringBuilder consoleText;
 	
-	public MainFrame() {
+	public SensorReloadFrame() {
 		taskIndex = 0;		
 		consoleText = new StringBuilder();
 		try {
@@ -181,12 +181,13 @@ public class MainFrame extends JFrame {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		taskIndex = 0;
 	}
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 		    public void run() {
-		        new MainFrame().setVisible(true);
+		        new SensorReloadFrame().setVisible(true);
 		    }
 		});
 	}
