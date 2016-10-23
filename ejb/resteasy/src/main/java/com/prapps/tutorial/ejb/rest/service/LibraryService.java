@@ -1,5 +1,6 @@
 package com.prapps.tutorial.ejb.rest.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,8 @@ import javax.ws.rs.Produces;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.prapps.tutorial.ejb.rest.exception.ServiceException;
+import com.prapps.tutorial.ejb.rest.exception.type.ErrorCodeType;
 import com.prapps.tutorial.ejb.rest.model.Book;
 
 @Path("/library")
@@ -34,7 +37,9 @@ public class LibraryService {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("retrieving isbn: "+isbn);
 		}
-		return store.get(isbn);
+		
+		Book book = store.get(isbn);
+		return book;
 	}
 	
 	@GET
@@ -52,10 +57,23 @@ public class LibraryService {
 	@PUT
 	@Path("/books")
 	@Produces({"application/json", "application/xml"})
-	public void addBook(Book book) {
+	public void addBook(Book book) throws ServiceException {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("New book: " + book);
 		}
+		
+		Collection<ErrorCodeType> errors = new ArrayList<>();
+		if (null == book.getIsbn() || book.getIsbn().isEmpty()) {
+			errors.add(ErrorCodeType.MANDATORY_ISBN);
+		}
+		if (null == book.getAuthor() || book.getAuthor().isEmpty()) {
+			errors.add(ErrorCodeType.MANDATORY_AUTHOR);
+		}
+		
+		if (!errors.isEmpty()) {
+			throw new ServiceException(errors);
+		}
+		
 		store.put(book.getIsbn(), book);
 	}
 }

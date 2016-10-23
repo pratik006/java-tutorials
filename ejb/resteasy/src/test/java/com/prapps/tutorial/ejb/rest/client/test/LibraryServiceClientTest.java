@@ -21,11 +21,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.prapps.tutorial.ejb.rest.exception.type.ServiceErrorMessage;
+import com.prapps.tutorial.ejb.rest.model.BaseResponse;
 import com.prapps.tutorial.ejb.rest.model.Book;
 
 public class LibraryServiceClientTest {
 	private static final Logger LOG = Logger.getLogger(LibraryServiceClientTest.class.getName());
-	private static final String url = "http://localhost:8080/restful-webservice/library/books";
+	private static final String url = "http://localhost:8080/rest/library/books";
 
 	Book dummyBook;
 	static {
@@ -49,11 +51,28 @@ public class LibraryServiceClientTest {
 
 		LOG.fine("Headers" + response.getHeaders());
 		LOG.fine("Status: " + response.getStatus());
-		LOG.fine("Server response : \n");
 		
 		Book retrieved = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE)
 				.target(url).path("/{isbn}").resolveTemplate("isbn", dummyBook.getIsbn()).request().get().readEntity(Book.class);
 		Assert.assertEquals(dummyBook, retrieved);
+	}
+
+	@Test
+	public void testAddBookFailed() {
+		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
+		dummyBook.setIsbn(null);
+		dummyBook.setAuthor(null);
+		Entity<Book> entity = Entity.entity(dummyBook, MediaType.APPLICATION_JSON);
+		Response response = client.target(url).request().put(entity);
+
+		LOG.fine("Headers" + response.getHeaders());
+		LOG.fine("Status: " + response.getStatus());
+		BaseResponse baseResponse = response.readEntity(BaseResponse.class);
+		Assert.assertEquals("failed", baseResponse.getStatus());
+		Assert.assertTrue(!baseResponse.getErrors().isEmpty());
+		for (ServiceErrorMessage errorMsg : baseResponse.getErrors()) {
+			LOG.fine(errorMsg.getErrorCode()+" - "+errorMsg.getErrorCode());
+		}
 	}
 
 	@Test
@@ -65,7 +84,6 @@ public class LibraryServiceClientTest {
 
 		LOG.fine("Headers" + response.getHeaders());
 		LOG.fine("Status: " + response.getStatus());
-		LOG.fine("Server response : \n");
 		LOG.fine("Title: " + book.getTitle() + "\tAuthor: " + book.getAuthor() + "\tISBN: " + book.getIsbn());
 		Assert.assertEquals("My Gita", book.getTitle());
 		Assert.assertEquals("Devdutt Patnaik", book.getAuthor());
