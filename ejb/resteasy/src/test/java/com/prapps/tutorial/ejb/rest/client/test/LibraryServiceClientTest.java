@@ -18,61 +18,123 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.prapps.tutorial.ejb.rest.model.Book;
 
 public class LibraryServiceClientTest {
 	private static final Logger LOG = Logger.getLogger(LibraryServiceClientTest.class.getName());
-	private static final String url = "http://localhost:8080/restful-webservice/library/books";
+	private static final String url = "http://localhost:8080/rest/library/books";
 
-	Book dummyBook;
 	static {
 		System.setProperty("java.util.logging.config.file", "src/test/resources/logging.properties");
 	}
 	
-	@Before
-	public void setUp() {
-		dummyBook = new Book();
-		dummyBook.setAuthor("Devdutt Patnaik");
-		dummyBook.setIsbn("9788129137708");
-		dummyBook.setTitle("My Gita");
-		dummyBook.setPublishedDate(Calendar.getInstance());	
+	private static final String ISBN = "9788129137708";
+	private static final String AUTHOR = "Devdutt Patnaik";
+	private static final String TITLE = "My Gita";
+	
+	private Book addBook(Book book) {
+		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
+		Entity<Book> entity = Entity.entity(book, MediaType.APPLICATION_JSON);
+		LOG.finest("targetUrl: "+url);
+		Response response = client.target(url).request().put(entity);
+
+		LOG.finest("Headers" + response.getHeaders());
+		LOG.finest("Status: " + response.getStatus());
+		Book addedBook = response.readEntity(Book.class);
+		LOG.finest("addedBook: "+addedBook);
+		
+		Book retrieved = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE)
+				.target(url).path("/{isbn}").resolveTemplate("isbn", book.getIsbn()).request().get().readEntity(Book.class);
+		return retrieved;
+	}
+	
+	private boolean deleteBook(Book book) {
+		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
+		Response response = client.target(url+"/"+book.getIsbn()).request().delete();
+
+		LOG.fine("Headers" + response.getHeaders());
+		LOG.fine("Status: " + response.getStatus());
+		
+		Book retrieved = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE)
+				.target(url).path("/{isbn}").resolveTemplate("isbn", book.getIsbn()).request().get().readEntity(Book.class);
+		return retrieved==null;
+	}
+	
+	private Book findBook(String isbn) {
+		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
+		Response response = client.target(url+"/"+isbn).request().get();
+		if (response.getStatus() == 200 && response.hasEntity()) {
+			return response.readEntity(Book.class);
+		}
+		
+		return null;
 	}
 
 	@Test
 	public void testAddBook() {
-		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
-		Entity<Book> entity = Entity.entity(dummyBook, MediaType.APPLICATION_JSON);
-		Response response = client.target(url).request().put(entity);
-
-		LOG.fine("Headers" + response.getHeaders());
-		LOG.fine("Status: " + response.getStatus());
-		LOG.fine("Server response : \n");
+		Book book = new Book();
+		book.setAuthor("Herbert Schildt");
+		book.setIsbn("0071823506, 9780071823500");
+		book.setPublishedDate(Calendar.getInstance());
+		book.setTitle("Java: The Complete Reference, Ninth Edition");
+		Book retrieved = addBook(book);
+		Assert.assertEquals(book, retrieved);
 		
-		Book retrieved = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE)
-				.target(url).path("/{isbn}").resolveTemplate("isbn", dummyBook.getIsbn()).request().get().readEntity(Book.class);
-		Assert.assertEquals(dummyBook, retrieved);
+		Book searchedBook = findBook(book.getIsbn());
+		Assert.assertEquals(book.getIsbn(), searchedBook.getIsbn());
+		Assert.assertEquals(book.getAuthor(), searchedBook.getAuthor());
+		
+		//deleteBook(retrieved);
 	}
-
+	
+	@Test
+	public void testDeleteBook() {
+		Book book = new Book();
+		book.setAuthor("Herbert Schildt");
+		book.setIsbn("0071823506");
+		book.setPublishedDate(Calendar.getInstance());
+		book.setTitle("Java: The Complete Reference, Ninth Edition");
+		Book retrieved = addBook(book);
+		deleteBook(retrieved);
+		
+		Book searchedBook = findBook(book.getIsbn());
+		Assert.assertNull(searchedBook);
+	}
+	
 	@Test
 	public void testGetBookByIsbn() {
+		Book newbook = new Book();
+		newbook.setAuthor(AUTHOR);
+		newbook.setIsbn(ISBN);
+		newbook.setPublishedDate(Calendar.getInstance());
+		newbook.setTitle(TITLE);
+		Book addedBook = addBook(newbook);
 		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
-		WebTarget target = client.target(url).path("/{isbn}").resolveTemplate("isbn", dummyBook.getIsbn());
+		WebTarget target = client.target(url).path("/{isbn}").resolveTemplate("isbn", newbook.getIsbn());
 		Response response = target.request().get();
-		Book book = response.readEntity(Book.class);
+		Book searchedBook = response.readEntity(Book.class);
 
 		LOG.fine("Headers" + response.getHeaders());
 		LOG.fine("Status: " + response.getStatus());
-		LOG.fine("Server response : \n");
-		LOG.fine("Title: " + book.getTitle() + "\tAuthor: " + book.getAuthor() + "\tISBN: " + book.getIsbn());
-		Assert.assertEquals("My Gita", book.getTitle());
-		Assert.assertEquals("Devdutt Patnaik", book.getAuthor());
+		LOG.fine("Searched Book: "+searchedBook);
+		Assert.assertEquals(AUTHOR, searchedBook.getAuthor());
+		Assert.assertEquals(ISBN, searchedBook.getIsbn());
+		Assert.assertEquals(TITLE, searchedBook.getTitle());
+		
+		deleteBook(addedBook);
 	}
 	
 	@Test
 	public void testGetBooks() {
+		Book newbook = new Book();
+		newbook.setAuthor(AUTHOR);
+		newbook.setIsbn(ISBN);
+		newbook.setPublishedDate(Calendar.getInstance());
+		newbook.setTitle(TITLE);
+		Book addedBook = addBook(newbook);
+		
 		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
 		WebTarget target = client.target(url);
 		Response response = target.request().get();
@@ -81,27 +143,37 @@ public class LibraryServiceClientTest {
 		GenericType<List<Book>> bookListType = new GenericType<List<Book>>() {};
 		List<Book> books = response.readEntity(bookListType);
 		Book book = books.get(0);
-		Assert.assertEquals(dummyBook.getAuthor(), book.getAuthor());
-		Assert.assertEquals(dummyBook.getIsbn(), book.getIsbn());
-		Assert.assertEquals(dummyBook.getTitle(), book.getTitle());
+		Assert.assertEquals(AUTHOR, book.getAuthor());
+		Assert.assertEquals(ISBN, book.getIsbn());
+		Assert.assertEquals(TITLE, book.getTitle());
+		
+		deleteBook(addedBook);
 	}
 
 	@Test
 	public void testGetBookByAuthorAndTitle() {
+		Book newbook = new Book();
+		newbook.setAuthor(AUTHOR);
+		newbook.setIsbn(ISBN);
+		newbook.setPublishedDate(Calendar.getInstance());
+		newbook.setTitle(TITLE);
+		Book addedBook = addBook(newbook);
+		
 		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
 		Map<String, Object> map = new HashMap<>();
-		map.put("author", "Devdutt Patnaik");
-		map.put("title", "My Gita");
+		map.put("author", AUTHOR);
+		map.put("title", TITLE);
 		WebTarget target = client.target(url).path("/{author}/{title}").resolveTemplates(map);
 		Response response = target.request().get();
 		Book book = response.readEntity(Book.class);
 
 		LOG.fine("Headers" + response.getHeaders());
 		LOG.fine("Status: " + response.getStatus());
-		LOG.fine("Server response : \n");
 		LOG.fine("Title: " + book.getTitle() + "\tAuthor: " + book.getAuthor() + "\tISBN: " + book.getIsbn());
-		Assert.assertEquals("My Gita", book.getTitle());
-		Assert.assertEquals("Devdutt Patnaik", book.getAuthor());
+		Assert.assertEquals(TITLE, book.getTitle());
+		Assert.assertEquals(AUTHOR, book.getAuthor());
+		
+		deleteBook(addedBook);
 	}
 
 	public enum AddHeadersFilter implements ClientRequestFilter {
@@ -121,7 +193,7 @@ public class LibraryServiceClientTest {
 			// base64Token);
 			// requestContext.getHeaders().add("X-Requested-With",
 			// "XMLHttpRequest");
-			requestContext.getHeaders().add("Accept", "application/xml");
+			requestContext.getHeaders().add("Accept", "application/json");
 
 		}
 	}
