@@ -17,7 +17,17 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.Version;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.DeserializationContext;
+import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
+import org.jboss.resteasy.plugins.providers.jackson.ResteasyJacksonProvider;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.prapps.tutorial.ejb.rest.exception.type.ServiceErrorMessage;
@@ -27,6 +37,8 @@ import com.prapps.tutorial.ejb.rest.model.Book;
 public class LibraryServiceClientTest {
 	private static final Logger LOG = Logger.getLogger(LibraryServiceClientTest.class.getName());
 	private static final String url = "http://localhost:8080/rest/library/books";
+	
+	private Client client;
 
 	static {
 		System.setProperty("java.util.logging.config.file", "src/test/resources/logging.properties");
@@ -36,8 +48,37 @@ public class LibraryServiceClientTest {
 	private static final String AUTHOR = "Devdutt Patnaik";
 	private static final String TITLE = "My Gita";
 	
+	@Before
+	public void setUp() {
+		ResteasyJacksonProvider resteasyJacksonProvider = new ResteasyJacksonProvider();
+		ObjectMapper mapper = new ObjectMapper();
+		SimpleModule myModule = new SimpleModule("myModule", new Version(1, 0, 0, null));
+		myModule.addDeserializer(Book.class, new JsonDeserializer<Book>() {
+
+			@Override
+			public Book deserialize(JsonParser jp, DeserializationContext ctx)
+					throws IOException, JsonProcessingException {ctx.handleUnknownProperty(jp, this, Book.class, "publishedDate");
+				/*Book book = new Book();
+				ObjectCodec oc = jp.getCodec();
+		        JsonNode node = oc.readTree(jp);
+		        book.setAuthor(node.get("author").getTextValue());*/
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.getDeserializationConfig().addMixInAnnotations(Book.class, IgnoreBookMixIn.class);
+				Book book = mapper.readValue(jp, Book.class);
+		        return book;
+			}
+			
+			abstract class IgnoreBookMixIn
+			{
+			  @JsonIgnore public abstract void setPublishedDate(String value);
+			}
+		});
+		mapper.registerModule(myModule);
+		resteasyJacksonProvider.setMapper(mapper);
+		client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE).register(resteasyJacksonProvider);
+	}
+	
 	private Book addBook(Book book) {
-		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
 		Entity<Book> entity = Entity.entity(book, MediaType.APPLICATION_JSON);
 		LOG.finest("targetUrl: "+url);
 		Response response = client.target(url).request().put(entity);
@@ -47,13 +88,12 @@ public class LibraryServiceClientTest {
 		Book addedBook = response.readEntity(Book.class);
 		LOG.finest("addedBook: "+addedBook);
 		
-		Book retrieved = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE)
-				.target(url).path("/{isbn}").resolveTemplate("isbn", book.getIsbn()).request().get().readEntity(Book.class);
+		Book retrieved = client.target(url).path("/{isbn}")
+				.resolveTemplate("isbn", book.getIsbn()).request().get().readEntity(Book.class);
 		return retrieved;
 	}
 	
 	private boolean deleteBook(Book book) {
-		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
 		Response response = client.target(url+"/"+book.getIsbn()).request().delete();
 
 		LOG.fine("Headers" + response.getHeaders());
@@ -65,7 +105,6 @@ public class LibraryServiceClientTest {
 	}
 	
 	private Book findBook(String isbn) {
-		Client client = ClientBuilder.newClient().register(AddHeadersFilter.INSTANCE);
 		Response response = client.target(url+"/"+isbn).request().get();
 		if (response.getStatus() == 200 && response.hasEntity()) {
 			return response.readEntity(Book.class);

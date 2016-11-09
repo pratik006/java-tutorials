@@ -54,6 +54,10 @@ public class Book implements Serializable {
 		this.publishedDate = publishedDate;
 	}
 	
+	public void setPublishedDate(String publishedDate) {
+		//this.publishedDate = publishedDate;
+	}
+	
 	@Override
 	public boolean equals(Object otherObject) {
 		if (otherObject instanceof Book) {
