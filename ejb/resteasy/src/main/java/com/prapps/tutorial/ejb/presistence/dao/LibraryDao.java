@@ -3,7 +3,7 @@ package com.prapps.tutorial.ejb.presistence.dao;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,7 +17,7 @@ import com.prapps.tutorial.ejb.persistence.api.BookSearchCriteria;
 import com.prapps.tutorial.ejb.persistence.mapper.BookMapper;
 import com.prapps.tutorial.ejb.rest.model.Book;
 
-@Singleton
+@Stateless
 public class LibraryDao {
 
 	@Inject
