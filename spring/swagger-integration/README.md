@@ -1,0 +1,2 @@
+Run ApplicationStarter class and open this url- http://localhost:8080/spring/swagger-ui.html in browser. It should display the swagger api docs.
+Also http://localhost:8080/spring/api-docs show the REST representation of the same.
