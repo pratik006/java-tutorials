@@ -1,3 +1,3 @@
 rootProject.name = 'my-app'
 
-includeBuild '../my-lib'
+//includeBuild '../my-lib'
