@@ -1,0 +1,6 @@
+PAGE NAME,CSS_CELL,VALUE,TYPE
+LoginPage,#username,CHH0021,ENTRY
+LoginPage,#password,Trust@12,ENTRY
+LoginPage,#login-submit,,CLICK
+HomePage,.user-profile,,CLICK
+Logout,body > form > div.container.body > div > div.top_nav.fixed-top.clearfix > div > nav > ul > li.open > ul > li:nth-child(2) > a,,CLICK

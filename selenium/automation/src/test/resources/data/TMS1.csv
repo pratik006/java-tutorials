@@ -1,0 +1,13 @@
+PAGE NAME,CSS_CELL,VALUE,TYPE
+LoginPage,#username,CHH0021,ENTRY
+LoginPage,#password,Trust@12,ENTRY
+LoginPage,#login-submit,,CLICK
+HomePage,body > form > div.container.body > div > div.top_nav.fixed-top.clearfix > div > nav > ul > li:nth-child(2) > a > span:nth-child(1) > i,,CLICK
+HomePage,.open > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1),,CLICK
+HomePage,html body.nav-md form div.container.body div.main_container div.col-md-3.left_col.menu_fixed div.left_col.scroll-view div#sidebar-menu.main_menu_side.hidden-print.main_menu div.menu_section ul.nav.side-menu li.test a,,CLICK
+HomePage,#childmenu0 > li:nth-child(1) > a:nth-child(1),,CLICK
+View Registerd Patient,#middleFrame,,IFRAME
+View Registerd Patient,#no-more-tables > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > b > u,,CLICK
+,,5000,WAIT
+View Registerd Patient,#patientTypeIP,,CLICK
+View Registerd Patient,body > div.bootbox.modal.fade.bootbox-confirm.in > div > div > div.modal-footer > button:nth-child(2),,CLICK
