@@ -17,12 +17,11 @@ public class Automation extends TestBaseSetup {
 	}
 	
 	public void automate(String testcaseName) {
-		for (CsvRec rec : recordsMap.get(testcaseName)) {
-			handleRecord(rec);	
-		}
+		recordsMap.get(testcaseName).forEach(rec -> handleRecord(rec));
 	}
 	
 	public void close() {
+		waitTimer(1000);
 		getDriver().close();
 	}
 

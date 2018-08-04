@@ -27,21 +27,21 @@ public class TestAutomation extends TestBaseSetup {
 	}
 	
 	@Test
-	public void testRegistrationMithra() throws IOException {
+	public void testRegistrationMithra() {
 		for (CsvRec rec : recordsMap.get("RegistrationMithra")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testRegistrationMedco() throws IOException {
+	public void testRegistrationMedco() {
 		for (CsvRec rec : recordsMap.get("MedcoOnly")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testMedcoIP() throws IOException {
+	public void testMedcoIP() {
 		for (CsvRec rec : recordsMap.get("MedcoIP")) {
 			handleRecord(rec);	
 		}
@@ -50,49 +50,49 @@ public class TestAutomation extends TestBaseSetup {
 	
 	
 	@Test
-	public void testMedcoPreauthSave() throws IOException {
+	public void testMedcoPreauthSave() {
 		for (CsvRec rec : recordsMap.get("MedcoPreauthSave")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testMedcoPreauthInitiate() throws IOException {
+	public void testMedcoPreauthInitiate() {
 		for (CsvRec rec : recordsMap.get("MedcoPreauthInitiate")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testMedcoSurgery() throws IOException {
+	public void testMedcoSurgery() {
 		for (CsvRec rec : recordsMap.get("MedcoSurgery")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testMedcoDischarge() throws IOException {
+	public void testMedcoDischarge() {
 		for (CsvRec rec : recordsMap.get("MedcoDischarge")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testMedcoClaims() throws IOException {
+	public void testMedcoClaims() {
 		for (CsvRec rec : recordsMap.get("MedcoClaims")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testEndToEndAutoApproval() throws IOException {
-		for (CsvRec rec : recordsMap.get("EndToEndAutoApproval")) {
+	public void testEndToEndAutoApproval() {
+		for (CsvRec rec : recordsMap.get("E2E")) {
 			handleRecord(rec);	
 		}
 	}
 	
 	@Test
-	public void testRegistrationMithraMedco() throws IOException {
+	public void testRegistrationMithraMedco() {
 		String[] testcases = new String[] {"RegistrationMithra", "RegistrationMedco"};
 		for (String testcase : testcases) {
 			for (CsvRec rec : recordsMap.get(testcase)) {

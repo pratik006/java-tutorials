@@ -39,7 +39,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestBaseSetup {
 	private static final Logger LOG = Logger.getLogger(TestBaseSetup.class.getName()); 
-	protected static final String TESTCASE_FILE = "src/test/resources/data/TMS.csv";
+	protected static final String TESTCASE_FILE = "TMS.csv";
 	private static WebDriver driver;
 	protected JavascriptExecutor jse;
 	protected String defaultDriver;
@@ -180,8 +180,7 @@ public class TestBaseSetup {
 				executeJS(rec.getCssSelector(), rec.getValue());
 				break;
 			case REFERENCE:
-				String refName = rec.getCssSelector().trim();
-				refer(refName, rec.getValue());
+				refer(rec.getCssSelector().trim(), rec.getValue());
 				break;
 			default:
 				break;
@@ -189,11 +188,17 @@ public class TestBaseSetup {
 		} catch(Exception ex) {
 			System.err.println("Erroneous Record: "+rec);
 			ex.printStackTrace();
+			throw ex;
 		}
 	}
 
 	private void refer(String refName, String value) {
 		LOG.info("Referring to "+refName);
+		if (null == value || value.trim().length() == 0) {
+			recordsMap.get(refName).forEach(rec -> handleRecord(rec));
+			return;
+		}
+		
 		int start = Integer.parseInt(value.split("-")[0].trim());
 		int end = Integer.parseInt(value.split("-")[1].trim());
 		recordsMap.get(refName).subList(start, end).forEach(rec -> handleRecord(rec));
