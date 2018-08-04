@@ -39,7 +39,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestBaseSetup {
 	private static final Logger LOG = Logger.getLogger(TestBaseSetup.class.getName()); 
-	protected static final String TESTCASE_FILE = "src/test/resources/data/TMS.csv";
+	protected static final String TESTCASE_FILE = "TMS.csv";
 	private static WebDriver driver;
 	protected JavascriptExecutor jse;
 	protected String defaultDriver;
