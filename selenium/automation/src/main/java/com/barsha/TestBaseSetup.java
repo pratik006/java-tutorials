@@ -111,7 +111,7 @@ public class TestBaseSetup {
 		driver.manage().window().maximize();
 		driver.navigate().to(config.getProperty("appUrl"));
 		getDriver().manage().timeouts().implicitlyWait(Integer.parseInt(config.getProperty("waitTime", "100")), TimeUnit.SECONDS);
-		wait = new WebDriverWait(getDriver(), Integer.parseInt(config.getProperty("waitTime", "100")));
+		wait = new WebDriverWait(getDriver(), Integer.parseInt(config.getProperty("waitTime", "10")));
 		jse = (JavascriptExecutor) driver;
 	}
 	
@@ -272,6 +272,12 @@ public class TestBaseSetup {
 		if ("radio".equals(elem.getAttribute("type"))) {
 			Actions actions = new Actions(getDriver());
 			actions.moveToElement(elem).click().perform();
+			LOG.info(""+elem.isSelected());
+			if (!elem.isSelected()) {
+				elem.click();
+				LOG.info("Radio button clicked");
+			}
+			
 			return;
 		} 
 		
