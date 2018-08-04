@@ -11,5 +11,6 @@ public enum ActionType {
 	IFRAME,
 	BACK,
 	WAIT,
-	JS
+	JS,
+	REFERENCE
 }
