@@ -7,7 +7,9 @@ public enum ActionType {
 	SAVE,
 	ENTRY,
 	UPLOAD,
+	DATE,
 	IFRAME,
 	BACK,
 	WAIT,
+	JS
 }

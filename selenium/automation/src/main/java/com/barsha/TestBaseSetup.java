@@ -42,6 +42,7 @@ import com.google.common.base.Predicate;
 public class TestBaseSetup {
 	protected static final String TESTCASE_FILE = "src/test/resources/data/TMS.csv";
 	private static WebDriver driver;
+	protected JavascriptExecutor jse;
 	protected String defaultDriver;
 	protected WebDriverWait wait;
 	private String binaryLocation;
@@ -109,6 +110,7 @@ public class TestBaseSetup {
 		driver.navigate().to(config.getProperty("appUrl"));
 		getDriver().manage().timeouts().implicitlyWait(Integer.parseInt(config.getProperty("waitTime", "100")), TimeUnit.SECONDS);
 		wait = new WebDriverWait(getDriver(), Integer.parseInt(config.getProperty("waitTime", "100")));
+		jse = (JavascriptExecutor) driver;
 	}
 	
 	@BeforeClass
@@ -120,6 +122,7 @@ public class TestBaseSetup {
 		        ) {
 		            for (CSVRecord csvRecord : csvParser.getRecords()) {
 		            	if (csvRecord.getRecordNumber() > 1) {
+		            		System.out.println(csvRecord.get(3));
 		            		CsvRec rec = new CsvRec();
 		            		String testcaseName = csvRecord.get(0);
 		            		if (!recordsMap.containsKey(testcaseName)) {
@@ -141,39 +144,51 @@ public class TestBaseSetup {
 	
 	protected void handleRecord(CsvRec rec) {
 		System.out.println("Record: "+rec);
-		switch (rec.getType()) {
-		case CLICK:
-		click(rec.getCssSelector(), rec.getValue());
-		break;
-		case SELECT:select(rec.getCssSelector(), rec.getValue());
+		try {
+			switch (rec.getType()) {
+			case CLICK:
+			click(rec.getCssSelector(), rec.getValue());
 			break;
-		case SUBMIT:submit(rec.getCssSelector());
-			break;
-		case ENTRY:sendEntry(rec.getCssSelector(), rec.getValue());
-			break;
-		case SAVE:
-			WebElement elem = getElem(rec.getCssSelector());
-			String value = elem.getText().trim();
-			if (rec.getRegex() != null && rec.getRegex().length() > 0) {
-				Pattern p = Pattern.compile(rec.getRegex());
-				Matcher m = p.matcher(value);
-				while (m.find()) {
-					value = m.group(1);	
+			case SELECT:select(rec.getCssSelector(), rec.getValue());
+				break;
+			case SUBMIT:submit(rec.getCssSelector());
+				break;
+			case ENTRY:sendEntry(rec.getCssSelector(), rec.getValue());
+				break;
+			case SAVE:
+				WebElement elem = getElem(rec.getCssSelector());
+				String value = elem.getText().trim();
+				if (rec.getRegex() != null && rec.getRegex().length() > 0) {
+					Pattern p = Pattern.compile(rec.getRegex());
+					Matcher m = p.matcher(value);
+					while (m.find()) {
+						value = m.group(1);	
+					}
 				}
+				context.put(rec.getValue(), value);
+				System.out.println(rec.getValue() + " : " +elem.getText().trim());
+				break;
+			case IFRAME: getDriver().switchTo().frame(getElem(rec.getCssSelector()));
+				break;
+			case UPLOAD:
+				upload(rec.getCssSelector(), rec.getValue());
+				break;
+			case BACK: getDriver().switchTo().defaultContent();
+				break;
+			case WAIT:waitTimer(rec.getValue()==null ? 5000 : Integer.parseInt(rec.getValue()));
+				break;
+			case JS:
+				executeJS(rec.getCssSelector(), rec.getValue());
+				break;
 			}
-			context.put(rec.getValue(), value);
-			System.out.println("patient Id: " +elem.getText().trim());
-			break;
-		case IFRAME: getDriver().switchTo().frame(getElem(rec.getCssSelector()));
-			break;
-		case UPLOAD:
-			upload(rec.getCssSelector(), rec.getValue());
-			break;
-		case BACK: getDriver().switchTo().defaultContent();
-			break;
-		case WAIT:waitTimer(rec.getValue()==null ? 5000 : Integer.parseInt(rec.getValue()));
-			break;
+		} catch(Exception ex) {
+			System.err.println("Erroneous Record: "+rec);
+			ex.printStackTrace();
 		}
+	}
+
+	private void executeJS(String cssSelector, String value) {
+		jse.executeScript(value);
 	}
 
 	private void upload(String cssSel, String value) {
@@ -193,7 +208,7 @@ public class TestBaseSetup {
 	protected void sendEntry(String cssSel, String value) {
 		WebElement elem = getElem(cssSel);
 		elem.click();
-		//elem.clear();
+		elem.clear();
 		if (value.startsWith("${") && value.endsWith("}")) {
 			String key = value.substring(2, value.length()-1);
 			value = context.get(key);
@@ -244,7 +259,7 @@ public class TestBaseSetup {
 			return;
 		} 
 		
-		elem.click();	
+		elem.click();
 	}
 	
 	protected void waitTimer(int val) {

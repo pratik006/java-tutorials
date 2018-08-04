@@ -1,12 +1,10 @@
 package com.barsha;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 
 public class Automation extends TestBaseSetup {
 
@@ -20,7 +18,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("Logout")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -28,7 +25,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("RegistrationMithra")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -36,7 +32,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoOnly")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -44,7 +39,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoIP")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	
@@ -54,7 +48,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoPreauthSave")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -62,16 +55,13 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoPreauthInitiate")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
-	
 	
 	@Test
 	public void testMedcoSurgery() throws IOException {
 		for (CsvRec rec : recordsMap.get("MedcoSurgery")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -79,7 +69,6 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoDischarge")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
 	}
 	
 	@Test
@@ -87,7 +76,13 @@ public class Automation extends TestBaseSetup {
 		for (CsvRec rec : recordsMap.get("MedcoClaims")) {
 			handleRecord(rec);	
 		}
-		waitTimer(1000);
+	}
+	
+	@Test
+	public void testEndToEndAutoApproval() throws IOException {
+		for (CsvRec rec : recordsMap.get("EndToEndAutoApproval")) {
+			handleRecord(rec);	
+		}
 	}
 	
 	@Test
@@ -99,11 +94,11 @@ public class Automation extends TestBaseSetup {
 				//waitTimer(5000);
 			}	
 		}
-		waitTimer(1000);
 	}
 	
 	@After
 	public void tearDown() {
+		waitTimer(1000);
 		getDriver().close();
 	}
 	
