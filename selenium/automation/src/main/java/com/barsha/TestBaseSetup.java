@@ -175,7 +175,7 @@ public class TestBaseSetup {
 			break;
 		}
 	}
-	
+
 	private void upload(String cssSel, String value) {
 		WebElement elem = getElem(cssSel);
 		elem.sendKeys(value);
@@ -193,7 +193,7 @@ public class TestBaseSetup {
 	protected void sendEntry(String cssSel, String value) {
 		WebElement elem = getElem(cssSel);
 		elem.click();
-		elem.clear();
+		//elem.clear();
 		if (value.startsWith("${") && value.endsWith("}")) {
 			String key = value.substring(2, value.length()-1);
 			value = context.get(key);

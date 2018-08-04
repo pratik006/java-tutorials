@@ -50,8 +50,41 @@ public class Automation extends TestBaseSetup {
 	
 	
 	@Test
-	public void testMedcoPreauth() throws IOException {
-		for (CsvRec rec : recordsMap.get("MedcoPreauth")) {
+	public void testMedcoPreauthSave() throws IOException {
+		for (CsvRec rec : recordsMap.get("MedcoPreauthSave")) {
+			handleRecord(rec);	
+		}
+		waitTimer(1000);
+	}
+	
+	@Test
+	public void testMedcoPreauthInitiate() throws IOException {
+		for (CsvRec rec : recordsMap.get("MedcoPreauthInitiate")) {
+			handleRecord(rec);	
+		}
+		waitTimer(1000);
+	}
+	
+	
+	@Test
+	public void testMedcoSurgery() throws IOException {
+		for (CsvRec rec : recordsMap.get("MedcoSurgery")) {
+			handleRecord(rec);	
+		}
+		waitTimer(1000);
+	}
+	
+	@Test
+	public void testMedcoDischarge() throws IOException {
+		for (CsvRec rec : recordsMap.get("MedcoDischarge")) {
+			handleRecord(rec);	
+		}
+		waitTimer(1000);
+	}
+	
+	@Test
+	public void testMedcoClaims() throws IOException {
+		for (CsvRec rec : recordsMap.get("MedcoClaims")) {
 			handleRecord(rec);	
 		}
 		waitTimer(1000);
