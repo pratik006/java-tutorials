@@ -12,5 +12,6 @@ public enum ActionType {
 	BACK,
 	WAIT,
 	JS,
-	REFERENCE
+	REFERENCE,
+	SET
 }

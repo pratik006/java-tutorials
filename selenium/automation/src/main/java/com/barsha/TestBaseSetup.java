@@ -183,6 +183,9 @@ public class TestBaseSetup {
 				String refName = rec.getCssSelector().trim();
 				refer(refName, rec.getValue());
 				break;
+			case SET:
+				context.put(rec.getCssSelector(), rec.getValue());
+				break;
 			default:
 				break;
 			}
