@@ -203,6 +203,11 @@ public class TestBaseSetup {
 		}
 		
 		int start = Integer.parseInt(value.split("-")[0].trim());
+		if (value.split("-").length == 1 || value.split("-")[1] == null || value.split("-")[1].trim().length() == 0) {
+			recordsMap.get(refName).subList(start, recordsMap.get(refName).size()).forEach(rec -> handleRecord(rec));
+			return;
+		}
+		
 		int end = Integer.parseInt(value.split("-")[1].trim());
 		recordsMap.get(refName).subList(start, end).forEach(rec -> handleRecord(rec));
 	}
