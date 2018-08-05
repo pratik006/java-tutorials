@@ -1,0 +1,1 @@
+java -jar dist/auto-csv.jar TMS.csv %1
