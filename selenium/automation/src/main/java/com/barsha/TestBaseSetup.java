@@ -234,20 +234,16 @@ public class TestBaseSetup {
 		WebElement elem = getElem(cssSel);
 		elem.click();
 		elem.clear();
-		if (value.startsWith("${") && value.endsWith("}")) {
-			String key = value.substring(2, value.length()-1);
-			value = context.get(key);
-		}
+		value = isVar(value) ? getVar(value) : value;
 		
 		elem.sendKeys(value);
 	}
 	
 	protected void select(String cssSel, String value) {
+		value = isVar(value) ? getVar(value) : value;
 		try {
 			WebElement elem = getElem(cssSel);
 			int index = Integer.parseInt(value);
-			//WebElement target = elem.findElement(By.cssSelector(":nth-child("+index+")"));
-			//wait.until(ExpectedConditions.elementToBeClickable(target));
 			wait.until(new Function<WebDriver, Object>() {
 				@Override
 				public Object apply(WebDriver t) {
@@ -269,13 +265,15 @@ public class TestBaseSetup {
 		wait.until(ExpectedConditions.visibilityOf(elem)); 
 		wait.until(ExpectedConditions.elementToBeClickable(elem));
 		
-		if ("radio".equals(elem.getAttribute("type"))) {
+		if ("radio".equals(elem.getAttribute("type")) && !elem.isSelected()) {
 			Actions actions = new Actions(getDriver());
 			actions.moveToElement(elem).click().perform();
-			LOG.info(""+elem.isSelected());
 			if (!elem.isSelected()) {
 				elem.click();
-				LOG.info("Radio button clicked");
+				if (!elem.isSelected()) {
+					waitTimer(500);
+					click(cssSel, value);	
+				}
 			}
 			
 			return;
@@ -301,4 +299,12 @@ public class TestBaseSetup {
 		}
 	}
 
+	private boolean isVar(String value) {
+		return (value.startsWith("${") && value.endsWith("}"));
+	}
+	
+	private String getVar(String value) {
+		String key = value.substring(2, value.length()-1);
+		return context.get(key);
+	}
 }
