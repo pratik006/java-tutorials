@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
-public class EurekaClientApplication implements GreetingController {
+public class EurekaClientApplication implements StudentService {
     public static void main(String[] args) {
         SpringApplication.run(EurekaClientApplication.class, args);
     }

@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: zuul-server
+server:
+  port: 8080
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+zuul:
+  #service mapping will be done if URL starts with /api
+  prefix: /api
+  routes:
+    student-service:
+      path: /student/**
+      serviceId: student-service
+
+  ratelimit:
+    enabled: true
+    repository: JPA
+    policy-list:
+      student-service:
+      - limit: 2
+        refresh-interval: 60
+        type:
+        - origin
+
+student-service:
+  ribbon:
+    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+    listOfServers: http://localhost:9081,http://localhost:9082,http://localhost:9083
+    ConnectTimeout: 1000
+    ReadTimeout: 3000
+    MaxTotalHttpConnections: 500
+    MaxConnectionsPerHost: 100
+
+
