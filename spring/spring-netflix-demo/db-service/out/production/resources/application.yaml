@@ -43,3 +43,8 @@ spring:
       instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 server:
   port: 9091
+
+port:
+  number:
+    min: 9081
+    max: 9083

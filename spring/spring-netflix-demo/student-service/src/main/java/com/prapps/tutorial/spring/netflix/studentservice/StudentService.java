@@ -41,4 +41,18 @@ public class StudentService {
     public String tryLuckFallback() {
         return "fallback for tryluck initiated";
     }
+
+    @GetMapping("/tryhash")
+    @HystrixCommand(fallbackMethod = "tryHashFallback", commandKey = "tryHash", groupKey = "tryHash")
+    public String tryHash() {
+        if (this.hashCode()%2 == 0) {
+            throw new RuntimeException();
+        }
+
+        return "success "+this.hashCode();
+    }
+
+    public String tryHashFallback() {
+        return "fallback for tryHash initiated hashCode: "+this.hashCode();
+    }
 }

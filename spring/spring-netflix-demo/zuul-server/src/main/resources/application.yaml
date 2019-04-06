@@ -24,18 +24,22 @@ zuul:
     repository: JPA
     policy-list:
       student-service:
-      - limit: 2
+      - limit: 20
         refresh-interval: 60
         type:
         - origin
 
-student-service:
-  ribbon:
-    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
-    listOfServers: http://localhost:9081,http://localhost:9082,http://localhost:9083
-    ConnectTimeout: 1000
-    ReadTimeout: 3000
-    MaxTotalHttpConnections: 500
-    MaxConnectionsPerHost: 100
+#student-service:
+#  ribbon:
+#    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+#    #listOfServers: http://localhost:9081,http://localhost:9082,http://localhost:9083
+#    ConnectTimeout: 1000
+#    ReadTimeout: 3000
+#    MaxTotalHttpConnections: 500
+#    MaxConnectionsPerHost: 100
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, info, health
