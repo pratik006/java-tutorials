@@ -15,19 +15,19 @@ zuul:
   #service mapping will be done if URL starts with /api
   prefix: /api
   routes:
-    student-service:
-      path: /student/**
-      serviceId: student-service
+    student-service: /student/**
+      #path: /student/**
+      #serviceId: student-service
 
-  ratelimit:
-    enabled: true
-    repository: JPA
-    policy-list:
-      student-service:
-      - limit: 20
-        refresh-interval: 60
-        type:
-        - origin
+#  ratelimit:
+#    enabled: true
+#    repository: JPA
+#    policy-list:
+#      student-service:
+#      - limit: 200
+#        refresh-interval: 60
+#        type:
+#        - origin
 
 #student-service:
 #  ribbon:
@@ -43,3 +43,11 @@ management:
     web:
       exposure:
         include: hystrix.stream, info, health
+
+
+logging:
+  level:
+    root: ERROR
+    org.apache.http.wire: ERROR
+    org.springframework.web: DEBUG
+    com.netflix.hystrix: DEBUG

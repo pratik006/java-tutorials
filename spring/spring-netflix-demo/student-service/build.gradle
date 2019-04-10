@@ -22,13 +22,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.prapps.tutorial.spring.netflix.studentservice.StudentServiceApplication'
 	}
 }

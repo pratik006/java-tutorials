@@ -14,13 +14,13 @@ repositories {
 }
 
 ext {
-	set('springCloudVersion', 'Greenwich.SR1')
+	set('springCloudVersion', 'Greenwich.RELEASE')
 }
 
 dependencies {
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
@@ -35,5 +35,11 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.prapps.tutorial.spring.netflix.zuulserver.ZuulProxyApplication'
 	}
 }

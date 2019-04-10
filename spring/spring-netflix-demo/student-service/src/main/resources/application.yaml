@@ -12,11 +12,12 @@ server:
   port: 0
   #port: ${random.int[8080,8083]}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: hystrix.stream, info, health
+#for hystrix
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: hystrix.stream, info, health
 
 logging:
   level:
