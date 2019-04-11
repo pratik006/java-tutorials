@@ -1,2 +1,0 @@
-./gradlew clean build
-java -jar build/libs/eureka-server-0.0.1-SNAPSHOT.jar
