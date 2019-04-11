@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: student-service
+  eureka:
+    #client:
+      #serviceUrl:
+        #defaultZone: http://localhost:8761/eureka
+    instance:
+      #preferIpAddress: true
+      instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+server:
+  port: 0
+  #port: ${random.int[8080,8083]}
+
+#for hystrix
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: hystrix.stream, info, health
+
+logging:
+  file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate: ERROR
+    com.netflix.hystrix: DEBUG
+
+port:
+  number:
+    min: 8081
+    max: 8083

@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'micro-services'
+include('eureka-server')
+include('zuul-server')
+include('db-service')
+project(':db-service').projectDir = file('services/db-service')
+include('student-service')
+project(':student-service').projectDir = file('services/student-service')
+
