@@ -1,11 +1,9 @@
 package com.prapps.tutorial.spring.netflix.db;
 
-import com.netflix.discovery.converters.Auto;
 import com.prapps.tutorial.spring.netflix.db.entity.Course;
 import com.prapps.tutorial.spring.netflix.db.entity.Student;
 import com.prapps.tutorial.spring.netflix.db.repo.CourseRepo;
 import com.prapps.tutorial.spring.netflix.db.repo.StudentRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
