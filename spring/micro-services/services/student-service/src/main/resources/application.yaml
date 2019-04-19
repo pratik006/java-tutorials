@@ -30,4 +30,4 @@ logging:
 port:
   number:
     min: 8081
-    max: 8083
+    max: 8089
