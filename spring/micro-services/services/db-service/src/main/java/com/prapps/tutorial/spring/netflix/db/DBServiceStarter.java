@@ -22,7 +22,8 @@ public class DBServiceStarter {
         SpringApplication.run(DBServiceStarter.class, args);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+    //for setting up initial data
+    /*@EventListener(ApplicationReadyEvent.class)
     public void initData(final ApplicationReadyEvent event) {
         event.getApplicationContext().getBean(StudentRepo.class).saveAll(Stream.<Student>of(
                 new Student("Pratik", "Sengupta"),
@@ -34,5 +35,5 @@ public class DBServiceStarter {
                 new Course("Diploma in Mechanical Engg", "6 month"),
                 new Course("Summer Internship in Java", "3 month"))
                 .collect(Collectors.toList()));
-    }
+    }*/
 }

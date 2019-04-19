@@ -3,13 +3,21 @@
 ###
 spring:
   datasource:
-    url: jdbc:h2:mem:example-app;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    platform: h2
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
+    # H2 configuration
+#    url: jdbc:h2:mem:example-app;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    platform: h2
+#    username: sa
+#    password:
+#    driverClassName: org.h2.Driver
+
+    url: jdbc:mysql://localhost:3306/test
+    platform: mysql
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: update
     properties:
@@ -21,13 +29,13 @@ spring:
   ###
   #   H2 Settings
   ###
-  h2:
-    console:
-      enabled: true
-      path: /console
-      settings:
-        trace: false
-        web-allow-others: false
+#  h2:
+#    console:
+#      enabled: true
+#      path: /console
+#      settings:
+#        trace: false
+#        web-allow-others: false
 
 
 
