@@ -4,8 +4,8 @@ pluginManagement {
     }
 }
 rootProject.name = 'micro-services'
-include('eureka-server')
-include('zuul-server')
+
+include 'eureka-server', 'zuul-server'
 include('db-service')
 project(':db-service').projectDir = file('services/db-service')
 include('student-service')
