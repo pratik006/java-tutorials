@@ -1,0 +1,49 @@
+version: '3'
+services:
+
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    restart: always
+
+  eureka-server:
+    restart: always
+    image: pratik006/eureka-server:0.0.1-SNAPSHOT
+    container_name: eureka-server
+    #    build:
+#      context: ./eureka-server
+#      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    ports:
+      - 8761:8080
+
+
+  db-service:
+    restart: always
+    image: pratik006/db-service:0.0.1-SNAPSHOT
+    container_name: db-service
+    environment:
+      - EUREKA_URI=http://eureka-server:8080/eureka
+      - MYSQL_DB_HOST=mysql
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=test
+    expose:
+      - "8080"
+    ports:
+      - 8081:8080
+    depends_on:
+      - mysql
+      - eureka-server
+
+#networks:
+#  spring-cloud-network:
+#    driver: bridge
