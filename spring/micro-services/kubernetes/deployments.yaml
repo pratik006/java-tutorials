@@ -1,0 +1,229 @@
+#kind: PersistentVolume
+#apiVersion: v1
+#metadata:
+#  name: mysql-pv-volume
+#  labels:
+#    type: local
+#spec:
+#  storageClassName: manual
+#  capacity:
+#    storage: 20Gi
+#  accessModes:
+#    - ReadWriteOnce
+#  hostPath:
+#    path: "/tmp/mysql/data"
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: mysql-pv-claim
+#spec:
+#  storageClassName: manual
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#
+#
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mysql
+#spec:
+#  ports:
+#    - port: 3306
+#  selector:
+#    app: mysql
+#  clusterIP: None
+#---
+#apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+#kind: Deployment
+#metadata:
+#  name: mysql
+#spec:
+#  selector:
+#    matchLabels:
+#      app: mysql
+#  strategy:
+#    type: Recreate
+#  template:
+#    metadata:
+#      labels:
+#        app: mysql
+#    spec:
+#      containers:
+#        - image: mysql:5.6
+#          name: mysql
+#          env:
+#            # Use secret in real usage
+#            - name: MYSQL_ROOT_PASSWORD
+#              value: root
+#          ports:
+#            - containerPort: 3306
+#              name: mysql
+#          volumeMounts:
+#            - name: mysql-persistent-storage
+#              mountPath: /var/lib/mysql
+#      volumes:
+#        - name: mysql-persistent-storage
+#          persistentVolumeClaim:
+#            claimName: mysql-pv-claim
+#
+
+
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: eureka-server
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+        - name: eureka-server-pod
+          image: pratik006/eureka-server:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          env:
+            - name: EUREKA_URI
+              value: http://eureka-server:8080/eureka
+          ports:
+            - containerPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-server
+spec:
+  selector:
+    app: eureka-server
+  ports:
+    - name: http
+      protocol: TCP
+      # Which port on the node is the service available through?
+      nodePort: 32000
+      # Inside the cluster, what port does the service expose?
+      port: 8080
+      # Which port do pods selected by this service expose?
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: student-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: student-service
+    spec:
+      containers:
+        - name: student-service-pod
+          image: pratik006/student-service:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          env:
+          - name: EUREKA_URI
+            value: http://eureka-server:8080/eureka
+          ports:
+            - containerPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-service
+spec:
+  selector:
+    app: student-service
+  ports:
+    - name: http
+      protocol: TCP
+      # Which port on the node is the service available through?
+      nodePort: 32001
+      # Inside the cluster, what port does the service expose?
+      port: 8080
+      # Which port do pods selected by this service expose?
+      targetPort: 8080
+  type: LoadBalancer
+
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db-service
+    spec:
+      containers:
+        - name: db-service-pod
+          image: pratik006/db-service:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          env:
+          - name: EUREKA_URI
+            value: "http://eureka-server:8080/eureka"
+          - name: MYSQL_DB_HOST
+            value: "mysql"
+          - name: MYSQL_DB_PORT
+            value: "3306"
+          - name: MYSQL_DATABASE
+            value: "test"
+          - name: MYSQL_USER
+            value: "root"
+          - name: MYSQL_PASSWORD
+            value: "root"
+          ports:
+            - containerPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+spec:
+  selector:
+    app: db-service
+  ports:
+    - name: http
+      protocol: TCP
+      # Which port on the node is the service available through?
+      nodePort: 32002
+      # Inside the cluster, what port does the service expose?
+      port: 8080
+      # Which port do pods selected by this service expose?
+      targetPort: 8080
+  type: LoadBalancer
+
+
+
+
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: db-credentials
+#type: Opaque
+#data:
+#  username: bWljaGFlbGJvbHRvbg==
+#  password: cGFzc3dvcmQ=
+#  host: YWNjb3VudC1kYXRhYmFzZQ==
+#  port: MzMwNg==
