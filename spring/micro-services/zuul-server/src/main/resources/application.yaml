@@ -9,7 +9,7 @@ eureka:
     registerWithEureka: false
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URI}
 
 zuul:
   #service mapping will be done if URL starts with /api
@@ -46,7 +46,7 @@ management:
 
 
 logging:
-  file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
+  #file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
   level:
     root: ERROR
     org.apache.http.wire: ERROR

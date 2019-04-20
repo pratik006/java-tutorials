@@ -1,7 +1,6 @@
 version: '3'
 services:
 
-
   mysql:
     container_name: mysql
     image: mysql
@@ -42,6 +41,32 @@ services:
       - 8081:8080
     depends_on:
       - mysql
+      - eureka-server
+
+  student-service:
+    restart: always
+    image: pratik006/student-service:0.0.1-SNAPSHOT
+    container_name: student-service
+    environment:
+      - EUREKA_URI=http://eureka-server:8080/eureka
+    expose:
+      - "8080"
+    ports:
+      - 8082:8080
+    depends_on:
+      - eureka-server
+
+  zuul-server:
+    restart: always
+    image: pratik006/zuul-server:0.0.1-SNAPSHOT
+    container_name: zuul-server
+    environment:
+      - EUREKA_URI=http://eureka-server:8080/eureka
+    expose:
+      - "8080"
+    ports:
+      - 8080:8080
+    depends_on:
       - eureka-server
 
 #networks:
