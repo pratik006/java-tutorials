@@ -7,16 +7,3 @@ jar {
         attributes 'Main-Class': 'com.prapps.spring.netflix.tutorial.EurekaServerApplication'
     }
 }
-
-task buildDocker2(type: Docker) {
-    baseImage = 'openjdk:8'
-    push = project.hasProperty('push')
-    tag = 'pratik006/eureka-server'
-    addFile {
-        from jar
-        rename { "${applicationName}.jar" }
-    }
-    entryPoint(['java', '-jar', "${applicationName}.jar"])
-    exposePort(8080)
-}
-buildDocker.dependsOn(build)
