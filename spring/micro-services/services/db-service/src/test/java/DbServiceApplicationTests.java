@@ -5,16 +5,16 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {DBServiceStarter.class})
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = {DBServiceStarter.class})
 public class DbServiceApplicationTests {
 
-	@BeforeClass
+	//@BeforeClass
 	public static void setUp() {
 		System.setProperty("logging.baseloc", "/tmp");
 	}
 
-	@Test
+	//@Test
 	public void contextLoads() {
 	}
 
