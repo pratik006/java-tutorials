@@ -42,4 +42,8 @@ allprojects {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }
     }
+
+    bootRun {
+        jvmArgs = [ "-Djavax.net.ssl.trustStore=/home/sengp/git/java-tutorials/spring/micro-services/mycerts", "-Djavax.net.ssl.trustStorePassword=changeit", "-Djavax.net.debug=TRUE"]
+    }
 }

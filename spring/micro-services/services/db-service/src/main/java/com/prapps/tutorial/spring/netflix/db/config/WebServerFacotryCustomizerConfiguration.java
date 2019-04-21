@@ -8,10 +8,10 @@ import org.springframework.util.SocketUtils;
 
 @Configuration
 public class WebServerFacotryCustomizerConfiguration implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
-    @Value("${port.number.min:8080}")
+    @Value("${port.number.min:8091}")
     private Integer minPort;
 
-    @Value("${port.number.max:8090}")
+    @Value("${port.number.max:8099}")
     private Integer maxPort;
 
     @Override

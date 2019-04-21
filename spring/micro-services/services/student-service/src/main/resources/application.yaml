@@ -1,17 +1,35 @@
 spring:
   application:
     name: student-service
-  eureka:
-    #client:
-      #serviceUrl:
-        #defaultZone: http://localhost:8761/eureka
-    instance:
-      #preferIpAddress: true
-      instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 server:
   port: 0
   #port: ${random.int[8080,8083]}
+  ssl:
+    enabled: true
+    key-alias: ${spring.application.name}
+    key-store-type: PKCS12
+    #key-store: classpath:${spring.application.name}.p12
+    key-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/student-service.p12
+    key-store-password: changeit
+    trust-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/mycerts
+    trust-store-password: changeit
+    trust-store-type: JKS
 
+eureka:
+  client:
+    securePortEnabled: true
+    serviceUrl:
+      defaultZone: https://localhost:8761/eureka
+  instance:
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+    statusPageUrl: https://localhost:${server.port}/info
+    healthCheckUrl: https://localhost:${server.port}/health
+    homePageUrl: https://localhost:${server.port}
+    preferIpAddress: false
+    hostname: localhost
+    #instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 #for hystrix
 #management:
 #  endpoints:
@@ -19,15 +37,15 @@ server:
 #      exposure:
 #        include: hystrix.stream, info, health
 
+port:
+  number:
+    min: 8081
+    max: 8089
+
 logging:
-  file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
+  file: ${logging.baseloc:/tmp}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
   level:
     root: INFO
     org.springframework.web: DEBUG
     org.hibernate: ERROR
     com.netflix.hystrix: DEBUG
-
-port:
-  number:
-    min: 8081
-    max: 8089

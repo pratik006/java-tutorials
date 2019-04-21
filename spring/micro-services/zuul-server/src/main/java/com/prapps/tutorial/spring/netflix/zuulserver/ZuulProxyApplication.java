@@ -18,4 +18,10 @@ public class ZuulProxyApplication {
 		SpringApplication.run(ZuulProxyApplication.class, args);
 	}
 
+	/*@Bean
+	public RibbonLoadBalancingHttpClient a() {
+		RibbonLoadBalancingHttpClient client = new RibbonLoadBalancingHttpClient();
+
+		return client;
+	}*/
 }

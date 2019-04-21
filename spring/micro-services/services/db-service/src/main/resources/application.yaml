@@ -2,6 +2,8 @@
 #   Database Settings
 ###
 spring:
+  application:
+    name: db-service
   datasource:
     # H2 configuration
 #    url: jdbc:h2:mem:example-app;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -14,7 +16,7 @@ spring:
     platform: mysql
     username: root
     password: root
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
@@ -25,42 +27,38 @@ spring:
         #show_sql: true
         #use_sql_comments: true
         #format_sql: true
+eureka:
+  instance:
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+    statusPageUrl: https://localhost:${server.port}/info
+    healthCheckUrl: https://localhost:${server.port}/health
+    homePageUrl: https://localhost:${server.port}
+    preferIpAddress: false
+    hostname: localhost
+  client:
+    securePortEnabled: true
+    serviceUrl:
+      defaultZone: https://localhost:8761/eureka/
 
-  ###
-  #   H2 Settings
-  ###
-#  h2:
-#    console:
-#      enabled: true
-#      path: /console
-#      settings:
-#        trace: false
-#        web-allow-others: false
-
-
-
-
-  application:
-    name: db-service
-  eureka:
-#    client:
-#      serviceUrl:
-#        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
-    instance:
-      #preferIpAddress: true
-      instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 server:
-  port: 9091
+  #port: 9091
   ssl:
-    key-alias: db-service
-    key-store-type: JKS
-    key-password: password
-    key-store: classpath:db-service.jks
+    #enabled: true
+    key-alias: ${spring.application.name}
+    key-store-type: PKCS12
+    #key-store: classpath:${spring.application.name}.p12
+    key-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/db-service.p12
+    key-store-password: changeit
+    trust-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/mycerts
+    trust-store-password: changeit
+    trust-store-type: JKS
 
 port:
   number:
-    min: 9081
-    max: 9089
+    min: 9091
+    max: 9099
 
 logging:
-  file: ${logging.baseloc?logging.baseloc:/tmp/tests}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
+  file: ${logging.baseloc:/tmp/tests}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
