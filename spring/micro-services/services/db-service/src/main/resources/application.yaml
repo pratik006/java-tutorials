@@ -29,14 +29,15 @@ spring:
         #format_sql: true
 eureka:
   instance:
+    preferIpAddress: false
+    hostname: localhost
     nonSecurePortEnabled: false
     securePortEnabled: true
     securePort: ${server.port}
-    statusPageUrl: https://localhost:${server.port}/info
-    healthCheckUrl: https://localhost:${server.port}/health
-    homePageUrl: https://localhost:${server.port}
-    preferIpAddress: false
-    hostname: localhost
+    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/info
+    healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
+    homePageUrl: https://${eureka.instance.hostname}:${server.port}
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
   client:
     securePortEnabled: true
     serviceUrl:

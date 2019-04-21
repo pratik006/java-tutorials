@@ -21,15 +21,15 @@ eureka:
     serviceUrl:
       defaultZone: https://localhost:8761/eureka
   instance:
+    preferIpAddress: false
+    hostname: localhost
     nonSecurePortEnabled: false
     securePortEnabled: true
     securePort: ${server.port}
-    statusPageUrl: https://localhost:${server.port}/info
-    healthCheckUrl: https://localhost:${server.port}/health
-    homePageUrl: https://localhost:${server.port}
-    preferIpAddress: false
-    hostname: localhost
-    #instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/info
+    healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
+    homePageUrl: https://${eureka.instance.hostname}:${server.port}
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 #for hystrix
 #management:
 #  endpoints:
