@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: student
+spec:
+  hosts:
+  - student-service
+  http:
+  - route:
+    - destination:
+        host: student-service
+        subset: v1
+---
+
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: db
+spec:
+  hosts:
+  - db-service
+  http:
+  - route:
+    - destination:
+        host: db-service
+        subset: v1
+---
+
+
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "istio-client-mtls"
+spec:
+  host: "*.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+
+
+---
+
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "MeshPolicy"
+metadata:
+  name: "default"
+spec:
+  peers:
+  - mtls:
+        mode: PERMISSIVE

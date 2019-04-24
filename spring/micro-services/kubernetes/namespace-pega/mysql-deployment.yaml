@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
+  namespace: pega
 spec:
   #type: NodePort
   ports:
@@ -16,6 +17,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-secret
+  namespace: pega
 type: Opaque
 data:
   MYSQL_ROOT_PASSWORD: cm9vdA== #root
@@ -27,6 +29,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
+  namespace: pega
 spec:
   accessModes:
     - ReadWriteOnce
@@ -38,6 +41,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: pega
 spec:
   selector:
     matchLabels:

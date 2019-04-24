@@ -1,23 +1,12 @@
 spring:
   application:
     name: student-service
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI}
-  instance:
-    #preferIpAddress: true
-    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 server:
   port: 8080
 
-#for hystrix
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: hystrix.stream, info, health
-
+services:
+  core-api:
+    host: ${CORE_API_HOST}
 logging:
   #file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
   level:

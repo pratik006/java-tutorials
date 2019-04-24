@@ -5,14 +5,14 @@ spring:
   application:
     name: db-service
   datasource:
-    url: jdbc:mysql://${MYSQL_DB_HOST:mysql}:${MYSQL_DB_PORT:3306}/${MYSQL_DATABASE:test}
-    platform: mysql
-    username: ${MYSQL_USER:root}
-    password: ${MYSQL_PASSWORD:root}
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:${DB_PLATFORM}://${DB_HOST}:${DB_PORT}/${DATABASE:test}
+    platform: ${DB_PLATFORM}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driverClassName: ${DB_DRIVER_CLASS_NAME:org.postgresql.Driver}
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
+    database-platform: ${DB_DIALECT}
     hibernate:
       ddl-auto: update
     properties:
@@ -21,17 +21,8 @@ spring:
         #use_sql_comments: true
         #format_sql: true
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI}
-  instance:
-    #preferIpAddress: true
-    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 server:
   port: 8080
-#  ssl:
-#    key-alias: db-service
-#    key-store-type: JKS
-#    key-password: password
-#    key-store: classpath:db-service.jks
+#logging:
+#  level:
+#    org.springframework: DEBUG

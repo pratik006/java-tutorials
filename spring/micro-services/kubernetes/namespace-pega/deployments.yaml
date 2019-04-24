@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: eureka-server
+  namespace: pega
+  labels:
+    app: eureka-server
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+        - name: eureka-server-pod
+          image: pratik006/eureka-server:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          env:
+            - name: EUREKA_URI
+              value: http://eureka-server:8080/eureka
+          ports:
+            - containerPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-server
+  namespace: pega
+spec:
+  selector:
+    app: eureka-server
+  ports:
+    - name: http
+      protocol: TCP
+      # Which port on the node is the service available through?
+      nodePort: 32000
+      # Inside the cluster, what port does the service expose?
+      port: 8080
+      # Which port do pods selected by this service expose?
+      targetPort: 8080
+  type: LoadBalancer
+
+
+
+
+
+
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: db-credentials
+#type: Opaque
+#data:
+#  username: bWljaGFlbGJvbHRvbg==
+#  password: cGFzc3dvcmQ=
+#  host: YWNjb3VudC1kYXRhYmFzZQ==
+#  port: MzMwNg==

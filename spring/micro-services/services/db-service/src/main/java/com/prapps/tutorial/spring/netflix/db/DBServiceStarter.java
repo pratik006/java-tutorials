@@ -1,24 +1,27 @@
 package com.prapps.tutorial.spring.netflix.db;
 
-import com.prapps.tutorial.spring.netflix.db.entity.Course;
-import com.prapps.tutorial.spring.netflix.db.entity.Student;
-import com.prapps.tutorial.spring.netflix.db.repo.CourseRepo;
-import com.prapps.tutorial.spring.netflix.db.repo.StudentRepo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.prapps.tutorial.spring.netflix.db")
-@EnableEurekaClient
+@Configuration
+@PropertySource("classpath:application.yaml")
 public class DBServiceStarter {
+
     public static void main(String[] args) {
+        System.out.println("ENV variables -");
+        System.getenv().entrySet().stream()
+                //.filter(entry -> entry.getKey().contains("DB"))
+                .forEach(entry -> System.out.println(entry.getKey()+": "+entry.getValue()));
+
+        System.getProperties().entrySet().stream()
+                //.filter(entry -> entry.getKey().toString().contains("MYSQL"))
+                .forEach(entry-> System.out.println(entry.getKey()+": "+entry.getValue()));
         SpringApplication.run(DBServiceStarter.class, args);
     }
 
@@ -29,11 +32,5 @@ public class DBServiceStarter {
                 new Student("Pratik", "Sengupta"),
                 new Student("Pratik", "Das"))
                 .collect(Collectors.toSet()));
-
-        event.getApplicationContext().getBean(CourseRepo.class).saveAll(Stream.<Course>of(
-                new Course("Diploma in Software Engg", "6 month"),
-                new Course("Diploma in Mechanical Engg", "6 month"),
-                new Course("Summer Internship in Java", "3 month"))
-                .collect(Collectors.toList()));
     }*/
 }

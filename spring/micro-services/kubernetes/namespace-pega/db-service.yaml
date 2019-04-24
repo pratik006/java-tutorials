@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-db-config
+  namespace: pega
+  labels:
+    app: postgres
+data:
+  DB_PLATFORM: "postgresql"
+  DB_HOST: "postgres.pega.svc.cluster.local"
+  DB_PORT: "5432"
+  DATABASE: "test"
+  DB_USER: "postgres"
+  DB_PASSWORD: "postgres"
+  DB_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+  DB_DIALECT: "org.hibernate.dialect.PostgreSQLDialect"
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db-service
+  namespace: pega
+  labels:
+    app: db-service
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db-service
+    spec:
+      containers:
+        - name: db-service-pod
+          image: pratik006/db-service:0.0.1-SNAPSHOT
+          #imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: postgres-db-config
+      #imagePullPolicy: IfNotPresent 
+
+---      
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: pega
+spec:
+  selector:
+    app: db-service
+  ports:
+    - name: http
+      protocol: TCP
+      # Which port on the node is the service available through?
+      nodePort: 32002
+      # Inside the cluster, what port does the service expose?
+      port: 8080
+      # Which port do pods selected by this service expose?
+      targetPort: 8080
+  type: LoadBalancer

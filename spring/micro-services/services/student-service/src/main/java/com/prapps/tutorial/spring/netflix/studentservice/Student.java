@@ -1,9 +1,13 @@
 package com.prapps.tutorial.spring.netflix.studentservice;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Student {
     private Long id;
     private String firstName;
     private String lastName;
+    private List<String> messages;
 
     public Student() { }
 
@@ -34,5 +38,17 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<String> getMessages() {
+        if (messages == null) {
+            messages = new ArrayList<>();
+        }
+
+        return messages;
+    }
+
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
     }
 }
