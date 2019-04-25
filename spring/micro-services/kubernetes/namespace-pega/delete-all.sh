@@ -1,4 +1,4 @@
-#kubectl delete -f istios-routing.yaml
+kubectl delete -f istios-routing.yaml
 
 kubectl delete -f student-service.yaml
 kubectl delete -f db-service.yaml

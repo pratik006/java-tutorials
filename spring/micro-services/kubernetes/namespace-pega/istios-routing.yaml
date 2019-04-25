@@ -1,51 +1,97 @@
 apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+kind: Gateway
 metadata:
-  name: student
+  name: fnx-gateway
+  namespace: pega
 spec:
-  hosts:
-  - student-service
-  http:
-  - route:
-    - destination:
-        host: student-service
-        subset: v1
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+
 ---
 
 
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: db
+  name: student-service
+  namespace: pega
 spec:
   hosts:
-  - db-service
+  - "*"
+  gateways:
+  - fnx-gateway
   http:
-  - route:
+  - match:
+    - uri:
+        prefix: /search
+    - uri:
+        prefix: /
+    route:
     - destination:
-        host: db-service
+        host: student-service
+        port: 
+          number: 8080
         subset: v1
 ---
 
 
-apiVersion: "networking.istio.io/v1alpha3"
-kind: "DestinationRule"
-metadata:
-  name: "istio-client-mtls"
-spec:
-  host: "*.svc.cluster.local"
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: db
+#   namespace: pega
+# spec:
+#   hosts:
+#   - db-service
+#   gateways:
+#   - pega-gateway # <---- bind to gateway
+#   http:
+#   - route:
+#     - destination:
+#         host: db-service
+#         subset: v1
+# ---
 
 
----
 
-apiVersion: "authentication.istio.io/v1alpha1"
-kind: "MeshPolicy"
-metadata:
-  name: "default"
-spec:
-  peers:
-  - mtls:
-        mode: PERMISSIVE
+  # - port:
+  #     number: 443
+  #     name: https
+  #     protocol: HTTPS
+  #   hosts:
+  #   - bookinfo.com
+  #   tls:
+  #     mode: SIMPLE
+  #     serverCertificate: /tmp/tls.crt
+  #     privateKey: /tmp/tls.key
+
+
+# apiVersion: "networking.istio.io/v1alpha3"
+# kind: "DestinationRule"
+# metadata:
+#   name: "istio-client-mtls"
+# spec:
+#   host: "*.svc.cluster.local"
+#   trafficPolicy:
+#     tls:
+#       mode: ISTIO_MUTUAL
+
+
+# ---
+
+# apiVersion: "authentication.istio.io/v1alpha1"
+# kind: "MeshPolicy"
+# metadata:
+#   name: "default"
+# spec:
+#   peers:
+#   - mtls:
+#         mode: PERMISSIVE
