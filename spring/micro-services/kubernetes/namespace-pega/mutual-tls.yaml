@@ -1,0 +1,39 @@
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "student-service-istio-client-mtls"
+  namespace: pega
+spec:
+  host: student-service.pega.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+
+---
+
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "db-service-istio-client-mtls"
+  namespace: pega
+spec:
+  host: db-service.pega.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+
+---  
+
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "db-service-permissive"
+  namespace: pega
+spec:
+  targets:
+  - name: db-service
+  - name: student-service
+  peers:
+  - mtls:
+      mode: STRICT
+      #mode: PERMISSIVE

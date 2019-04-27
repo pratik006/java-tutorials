@@ -13,6 +13,19 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      #mode: MUTUAL
+      mode: SIMPLE
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      caCertificates: /etc/istio/ingressgateway-ca-certs/ca-chain.cert.pem
+    hosts:
+    #- "student.example.com"
+    - "*"
 
 ---
 
@@ -30,6 +43,10 @@ spec:
   - match:
     - uri:
         prefix: /search
+    - uri:
+        prefix: /student/search
+    - uri:
+        prefix: /student    
     route:
     - destination:
         port:
