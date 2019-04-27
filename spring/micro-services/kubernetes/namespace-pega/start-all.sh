@@ -29,6 +29,8 @@ kubectl apply -f mutual-tls.yaml
 
 
 kubectl apply -f external-gatewal.yaml
+# Test it by making a call
+# kubectl exec -n pega -it $(kubectl -n pega get pods -l app=student-service -o jsonpath='{.items[0].metadata.name}') -c student-service-pod -- curl -sL -D - http://worldtimeapi.org/api/ip
 
 
 
