@@ -22,6 +22,8 @@ spec:
           env:
           - name: CORE_API_HOST
             value: http://db-service.pega:8080
+          - name: CORE_API_STUDENT_ENDPOINT
+            value: rest/db/student
 
 
 ---

@@ -23,12 +23,12 @@ export INGRESS_HOST=$(minikube ip)
 # troubleshoot: kubectl delete pod -n istio-system -l istio=ingressgateway
 # for mutual tls
 kubectl create -n istio-system secret generic istio-ingressgateway-ca-certs --from-file=student.example.com/2_intermediate/certs/ca-chain.cert.pem
-# kubectl apply -f mutual-tls.yaml
+kubectl apply -f mutual-tls.yaml
 # run app
 # curl -HHost:student.example.com --resolve student.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST --cacert student.example.com/2_intermediate/certs/ca-chain.cert.pem --cert student.example.com/4_client/certs/student.example.com.cert.pem --key student.example.com/4_client/private/student.example.com.key.pem https://student.example.com:$SECURE_INGRESS_PORT/search?name=Pratik
 
 
-
+kubectl apply -f external-gatewal.yaml
 
 
 

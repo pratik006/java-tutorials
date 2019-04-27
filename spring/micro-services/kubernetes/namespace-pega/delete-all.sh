@@ -1,3 +1,4 @@
+kubectl apply -f external-gatewal.yaml
 kubectl delete --ignore-not-found=true -n istio-system secret istio-ingressgateway-certs istio-ingressgateway-ca-certs
 kubectl delete --ignore-not-found=true -n istio-system generic istio-ingressgateway-certs istio-ingressgateway-ca-certs
 
