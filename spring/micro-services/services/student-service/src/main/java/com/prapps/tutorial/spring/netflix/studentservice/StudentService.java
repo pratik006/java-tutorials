@@ -1,6 +1,7 @@
 package com.prapps.tutorial.spring.netflix.studentservice;
 
-//import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,12 +15,14 @@ import java.util.List;
 import java.util.Random;
 
 @RestController
-@RequestMapping
+@RequestMapping("/student")
 public class StudentService {
+    private static Logger LOG = LoggerFactory.getLogger(StudentService.class);
 
     private RestTemplate restTemplate;
-    @Value("${services.core-api.host}")
-    private String dbServiceUrl;
+
+    @Value("${services.core-api.student-endpoint}")
+    private String studentEndpoint;
 
     @Autowired
     public StudentService(RestTemplate restTemplate) {
@@ -28,19 +31,22 @@ public class StudentService {
 
     @GetMapping("/search")
     public StudentSearchResponse findStudentsByName(@RequestParam ("name") String name) {
-        String targetUrl = dbServiceUrl + "/rest/db/student/"+name;
-        System.out.println("targetUrl: "+targetUrl);
+        String targetUrl = studentEndpoint + "/" + name;
+        LOG.debug("targetUrl: "+targetUrl);
         List<Student> students = restTemplate.exchange(targetUrl, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() { }).getBody();
-        System.out.println("got response");
         StudentSearchResponse response = new StudentSearchResponse(students);
         response.getMessages().add("hashCode of StudentService: "+hashCode() );
         return response;
     }
 
+    @PostMapping
+    public Student addStudent(@RequestBody Student student) {
+        return restTemplate.postForObject(studentEndpoint, student, Student.class);
+    }
+
 
     @GetMapping("/tryluck")
-    //@HystrixCommand(fallbackMethod = "tryLuckFallback", commandKey = "failluck", groupKey = "failluck")
     public String tryLuck() {
         if (new Random().nextBoolean()) {
             throw new RuntimeException();

@@ -7,6 +7,7 @@ public class StudentSearchResponse {
     private List<Student> students;
     private List<String> messages;
 
+    public StudentSearchResponse() { }
     public StudentSearchResponse(List<Student> students) {
         this.students = students;
     }

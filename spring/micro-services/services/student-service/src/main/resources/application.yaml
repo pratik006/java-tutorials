@@ -6,11 +6,12 @@ server:
 
 services:
   core-api:
-    host: ${CORE_API_HOST}
+    student-endpoint: ${CORE_API_HOST}/${CORE_API_STUDENT_ENDPOINT:rest/db/student}
+
 logging:
   #file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
   level:
     root: INFO
-    org.springframework.web: DEBUG
-    org.hibernate: ERROR
-    com.netflix.hystrix: DEBUG
+#    org.springframework.web: DEBUG
+    com.prapps: DEBUG
+    com.pega: DEBUG
