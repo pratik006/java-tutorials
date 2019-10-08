@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -19,9 +18,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @SpringBootApplication
 public class Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
-
-    @Autowired
-    ApplicationContext ctx;
 
     public static void main(String[] args) {
         //SpringApplication.run(Application.class, args);
