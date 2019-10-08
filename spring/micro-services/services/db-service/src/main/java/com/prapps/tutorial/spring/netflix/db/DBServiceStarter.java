@@ -1,18 +1,9 @@
 package com.prapps.tutorial.spring.netflix.db;
 
-import com.prapps.tutorial.spring.netflix.db.entity.Course;
-import com.prapps.tutorial.spring.netflix.db.entity.Student;
-import com.prapps.tutorial.spring.netflix.db.repo.CourseRepo;
-import com.prapps.tutorial.spring.netflix.db.repo.StudentRepo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.prapps.tutorial.spring.netflix.db")

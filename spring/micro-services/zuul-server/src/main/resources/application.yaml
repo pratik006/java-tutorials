@@ -3,16 +3,34 @@ spring:
     name: zuul-server
 server:
   port: 8080
+  ssl:
+    enabled: true
+    key-alias: zuul-server
+    key-store-type: PKCS12
+    #key-store: classpath:zuul-server.p12
+    key-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/zuul-server.p12
+    key-store-password: changeit
+    trust-store: /home/sengp/git/java-tutorials/spring/micro-services/certs/mycerts
+    trust-store-password: changeit
+    trust-store-type: JKS
 
 eureka:
   client:
+    securePortEnabled: true
     registerWithEureka: false
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/
+    instance:
+      nonSecurePortEnabled: false
+      securePortEnabled: true
+      securePort: ${server.port}
+      #preferIpAddress: true
+      instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
 
 zuul:
   #service mapping will be done if URL starts with /api
+  sslHostnameValidationEnabled: false
   prefix: /api
   routes:
     student-service: /student/**
@@ -46,9 +64,9 @@ management:
 
 
 logging:
-  file: ${logging.baseloc}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
+  file: ${logging.baseloc:/tmp/zuul}/${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}.log
   level:
-    root: ERROR
-    org.apache.http.wire: ERROR
-    org.springframework.web: DEBUG
+    root: INFO
+    #org.apache.http.wire: ERROR
+    #org.springframework.web: DEBUG
     com.netflix.hystrix: DEBUG

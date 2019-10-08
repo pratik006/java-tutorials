@@ -57,7 +57,7 @@ public class HystrixFallbackConfiguration {
 
                     @Override
                     public InputStream getBody() throws IOException {
-                        return new ByteArrayInputStream("{\"error\": \"hystrix fallback.\"}".getBytes());
+                        return new ByteArrayInputStream("{\"error\": \"hystrix fallback in play.\"}".getBytes());
                     }
 
                     @Override

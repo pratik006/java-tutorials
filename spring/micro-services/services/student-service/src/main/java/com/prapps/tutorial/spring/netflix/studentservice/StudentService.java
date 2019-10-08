@@ -1,6 +1,5 @@
 package com.prapps.tutorial.spring.netflix.studentservice;
 
-//import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
