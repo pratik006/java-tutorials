@@ -11,5 +11,6 @@ import java.time.LocalTime;
 @Data
 public class PersonEvent {
     private String eventId;
+    private Long personId;
     private LocalTime time;
 }

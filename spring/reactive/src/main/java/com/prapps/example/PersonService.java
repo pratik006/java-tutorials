@@ -33,6 +33,7 @@ class PersonService {
     }
 
     public Flux<PersonEvent> events(Long personId) {
-        return Flux.interval(Duration.ofSeconds(1)).map(s -> new PersonEvent(UUID.randomUUID().toString(), LocalTime.now()));
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(s -> new PersonEvent(UUID.randomUUID().toString(), personId, LocalTime.now()));
     }
 }

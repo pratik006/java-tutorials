@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
@@ -25,7 +27,9 @@ class ReactiveApplicationTests {
 
 	@Autowired
 	ReactiveApplicationTests(WebTestClient webTestClient) {
-		this.webTestClient = webTestClient;
+		this.webTestClient = webTestClient
+				.mutate()
+				.filter(ExchangeFilterFunctions.basicAuthentication("user", "password")).build();
 	}
 
 	@Test
