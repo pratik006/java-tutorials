@@ -29,6 +29,9 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	runtime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	runtime 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
