@@ -36,4 +36,9 @@ class PersonController {
     public Mono<Person> findOne(@PathVariable Long id) {
         return personService.getOne(id);
     }
+
+    @GetMapping(value = "/{id}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<PersonEvent> getEvents(@PathVariable Long id) {
+        return personService.events(id);
+    }
 }

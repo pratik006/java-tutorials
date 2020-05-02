@@ -29,7 +29,7 @@ class ReactiveApplicationTests {
 	}
 
 	@Test
-	void testCreateAndGetPerson() {
+	void testCreateAndGetById() {
 		String fName = "Pratik";
 		String lName = "Sengupta";
 		webTestClient
