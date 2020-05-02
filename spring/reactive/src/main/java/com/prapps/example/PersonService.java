@@ -15,7 +15,6 @@ class PersonService {
     }
 
     public Mono<Person> save(Person person) {
-        System.out.println(person);
         return personRepo.save(person);
     }
 
