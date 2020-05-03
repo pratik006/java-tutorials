@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,6 +70,22 @@ class ReactiveApplicationTests {
 													.map(p -> p.getFirstName())
 													.collect(Collectors.toSet()));
 				});
+	}
+
+	@Test
+	void testGetPersonEvents() {
+		AtomicInteger counter = new AtomicInteger(3);
+		FluxExchangeResult<PersonEvent> eventFlux = webTestClient.get().uri(REACTIVE_EP+"/1/events").accept(MediaType.APPLICATION_STREAM_JSON)
+				.exchange()
+				.expectStatus().isOk()
+				.returnResult(PersonEvent.class);
+		StepVerifier.create(eventFlux.getResponseBody())
+				//.expectNext(person)
+				.expectNextMatches(pe -> pe.getPersonId()==1 && pe.getTime()!=null)
+				.expectNextCount(4)
+				//.consumeNextWith(p -> )
+  				.thenCancel()
+				.verify();
 	}
 
 }

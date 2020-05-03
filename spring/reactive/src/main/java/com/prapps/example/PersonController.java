@@ -37,7 +37,7 @@ class PersonController {
         return personService.getOne(id);
     }
 
-    @GetMapping(value = "/{id}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/{id}/events", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<PersonEvent> getEvents(@PathVariable Long id) {
         return personService.events(id);
     }
