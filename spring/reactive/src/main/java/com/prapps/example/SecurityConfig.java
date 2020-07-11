@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity http) {
         return http.cors().and()
                 .csrf().disable()
+                .authorizeExchange().pathMatchers("/index.html").permitAll().and()
                 .authorizeExchange()
                 .anyExchange().authenticated().and().httpBasic().and()
                 .build();

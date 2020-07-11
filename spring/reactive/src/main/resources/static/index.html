@@ -1,0 +1,23 @@
+<html>
+
+<body>
+<div></div>
+</body>
+
+<script>
+    fetch("./reactive/person", {
+        'method': 'GET',
+        'headers': new Headers({
+            'Authorization': 'Basic ' + btoa('user:password'),
+    }),
+    })
+    .then(r => r.text())
+    .then(r => {
+    console.log(r);
+    document.querySelector('div').innerHTML = r;
+    return r;
+    })
+
+</script>
+
+</html>
