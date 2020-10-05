@@ -1,0 +1,58 @@
+server:
+  port: 9000
+
+spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms: 1000
+spring.cloud.stream.kafka.streams.binder.configuration:
+  default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+  default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+
+spring:
+  application.name: stream-service
+  cloud:
+    stream:
+      bindings:
+        pvout:
+          destination: pvs
+          producer.header-mode: none
+
+        pvin:
+          destination: pvs
+          consumer.header-mode: none
+
+        pcout:
+          destination: pcs
+          producer:
+            useNativeEncoding: true
+
+        pcin:
+          destination: pcs
+          group: pcs
+          content-type: application/json
+          consumer:
+            useNativeDecoding: true
+            header-mode: none
+        bindings:
+          pvout:
+            producer:
+              key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
+          pvin:
+            applicationId: processPageViews
+            consumer:
+              key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
+          pcout:
+            producer:
+              key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
+          pcin:
+            applicationId: processPageCount
+            consumer:
+              key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              value-serde: org.apache.kafka.common.serialization.Serdes$LongSerde
+
+
+
+logging.level.root: WARN
+logging.level.com.prapps: TRACE
+
