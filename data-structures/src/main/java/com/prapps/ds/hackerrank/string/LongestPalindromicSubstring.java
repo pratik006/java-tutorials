@@ -1,10 +1,21 @@
 package com.prapps.ds.hackerrank.string;
 
-public class LongestPalindromicSubstring {
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-    public static void main(String[] args) {
+public class LongestPalindromicSubstring {
+    public static class Student {
+        int x;
+    }
+    public static void main(String[] args) throws InterruptedException {
         LongestPalindromicSubstring lps = new LongestPalindromicSubstring();
-        System.out.println(lps.longestPalindrome("aacdefcaa"));
+        List<Student> list = new LinkedList<>();
+        for (int i=0;i<1000000000;i++) {
+            list.add(new Student());
+            System.out.println(lps.longestPalindrome("aacdefcaa"));
+            Thread.sleep(10);
+        }
     }
 
     public String longestPalindrome(String s) {
